@@ -4,7 +4,7 @@
 #include <Adafruit_GFX.h>
 #include <Adafruit_PCD8544.h>
 
-#include <Menu.hpp>
+#include "menu.h"
 
 #define LCD_LED_PIN 5
 #define FIRST_BUTTON_PIN 7

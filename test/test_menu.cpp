@@ -1,4 +1,5 @@
 #include <unity.h>
+#include "menu.h"
 
 #ifdef UNIT_TEST
 
