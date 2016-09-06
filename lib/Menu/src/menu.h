@@ -1,3 +1,6 @@
+#ifndef MENU_H
+#define MENU_H
+
 #include <Adafruit_GFX.h>
 #include <Adafruit_PCD8544.h>
 
@@ -48,3 +51,5 @@ class Menu {
 
     MenuNode *root = NULL;
 };
+
+#endif
