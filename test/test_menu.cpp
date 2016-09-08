@@ -5,7 +5,7 @@
 
 class TestMenuRenderer: public MenuRenderer {
   public:
-    void render(const Menu &menu) {
+    void render(MenuNode *node) {
     }
 };
 

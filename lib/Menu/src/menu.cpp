@@ -80,7 +80,7 @@ void Menu::addItem(const MenuItem item) {
 }
 
 void Menu::render() {
-  this->renderer.render(*this);
+  this->renderer.render(this->root);
 }
 
 MenuItem& Menu::getItem(int i) const {

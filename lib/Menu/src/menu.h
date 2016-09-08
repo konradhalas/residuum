@@ -8,11 +8,11 @@
 typedef std::string String;
 #endif
 
-class Menu;
+class MenuNode;
 
 class MenuRenderer {
   public:
-    virtual void render(const Menu &menu) = 0;
+    virtual void render(MenuNode *node) = 0;
 };
 
 class MenuActionsProvider {
@@ -53,9 +53,9 @@ class Menu {
   public:
     Menu(MenuRenderer & renderer, MenuActionsProvider & actionsProvider);
     void addItem(const MenuItem item);
-    MenuItem& getItem(int i) const;
     void render();
     void handle();
+    MenuItem& getItem(int i) const;
     int getItemsCount() const;
   private:
     MenuNode *currentNode;
