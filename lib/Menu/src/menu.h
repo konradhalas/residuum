@@ -32,6 +32,7 @@ class MenuItem {
     String getName() const;
     int getValue() const;
     void setValue(int value);
+    void handleNextAction();
 
   private:
     String name;

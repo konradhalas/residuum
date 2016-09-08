@@ -54,6 +54,10 @@ void MenuItem::setValue(int value) {
   this->value = value;
 }
 
+void MenuItem::handleNextAction() {
+  ++this->value;
+}
+
 Menu::Menu(MenuRenderer & renderer, MenuActionsProvider & actionsProvider) : renderer(renderer), actionsProvider(actionsProvider) {
   this->selectedNode = NULL;
   this->root = NULL;
@@ -120,7 +124,7 @@ void Menu::handle() {
     handledAction = true;
   } else if (this->actionsProvider.isNextAction()) {
     if (this->isEditMode) {
-      // TODO: handle by menu item
+      this->selectedNode->getItem().handleNextAction();
     } else {
       this->selectedNode = this->selectedNode->getNext();
     }

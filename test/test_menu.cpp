@@ -124,6 +124,7 @@ void test_handle_next_action_when_edit_mode() {
   menu.handle();
 
   TEST_ASSERT_EQUAL(renderer.selectedNodeNumber, 0);
+  TEST_ASSERT_EQUAL(menu.getItem(0).getValue(), 2);
 }
 
 int main(int argc, char const *argv[]) {
