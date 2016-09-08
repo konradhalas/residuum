@@ -25,6 +25,7 @@ class MenuActionsProvider {
 class MenuItem {
   public:
     MenuItem(String name, int value);
+    MenuItem(const MenuItem &item);
     String getName();
     int getValue();
     void setValue(int value);
@@ -36,16 +37,16 @@ class MenuItem {
 
 class MenuNode {
   public:
-    MenuNode(MenuItem *item);
+    MenuNode(const MenuItem item);
     bool hasNext();
     MenuNode* getNext();
     bool hasPrevious();
     MenuNode* getPrevious();
     void setNext(MenuNode *node);
     void setPrevious(MenuNode *node);
-    MenuItem* getItem();
+    MenuItem & getItem();
   private:
-    MenuItem *item;
+    MenuItem item;
     MenuNode *next;
     MenuNode *previous;
 };
@@ -53,7 +54,7 @@ class MenuNode {
 class Menu {
   public:
     Menu(MenuRenderer & renderer, MenuActionsProvider & actionsProvider);
-    void addItem(String variable, int value);
+    void addItem(const MenuItem item);
     void render();
     void nextItem();
     void previousItem();

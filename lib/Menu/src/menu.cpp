@@ -7,13 +7,12 @@ typedef std::string String;
 
 #include <menu.h>
 
-MenuNode::MenuNode(MenuItem *item) {
-  this->item = item;
+MenuNode::MenuNode(const MenuItem item): item(item) {
   this->previous = NULL;
   this->next = NULL;
 }
 
-MenuItem* MenuNode::getItem() {
+MenuItem & MenuNode::getItem() {
   return item;
 }
 
@@ -41,6 +40,11 @@ void MenuNode::setPrevious(MenuNode *node) {
   this->previous = node;
 }
 
+MenuItem::MenuItem(const MenuItem &item) {
+    this->name = item.name;
+    this->value = item.value;
+}
+
 MenuItem::MenuItem(String name, int value) {
   this->name = name;
   this->value = value;
@@ -64,11 +68,7 @@ Menu::Menu(MenuRenderer & renderer, MenuActionsProvider & actionsProvider) : ren
   this->isItemSelected = false;
 }
 
-void Menu::addItem(String itemName, int value) {
-  // itemName.remove(5);
-
-  MenuItem *item = new MenuItem(itemName, value);
-
+void Menu::addItem(const MenuItem item) {
   if (root == NULL) {
     root = new MenuNode(item);
     root->setNext(root);
@@ -98,7 +98,7 @@ MenuItem& Menu::getItem(int i) {
     ++count;
     current = current->getNext();
   }
-  return *current->getItem();
+  return current->getItem();
 }
 
 int Menu::getItemsCount() {
@@ -126,7 +126,7 @@ void Menu::toggleSelectItem() {
 }
 
 void Menu::incrementSelectedItem() {
-  currentNode->getItem()->setValue(currentNode->getItem()->getValue() + 1);
+  currentNode->getItem().setValue(currentNode->getItem().getValue() + 1);
 }
 
 void Menu::handle() {

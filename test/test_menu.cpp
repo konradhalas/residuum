@@ -26,10 +26,10 @@ void test_add_single_item() {
   TestMenuActionsProvider actionsProvider = TestMenuActionsProvider();
   Menu menu = Menu(renderer, actionsProvider);
 
-  menu.addItem("test", 1);
+  menu.addItem(MenuItem("item", 1));
 
   TEST_ASSERT_EQUAL(menu.getItemsCount(), 1);
-  TEST_ASSERT_TRUE(menu.getItem(0).getName() == "test");
+  TEST_ASSERT_TRUE(menu.getItem(0).getName() == "item");
 }
 
 void test_add_many_item() {
@@ -37,12 +37,12 @@ void test_add_many_item() {
   TestMenuActionsProvider actionsProvider = TestMenuActionsProvider();
   Menu menu = Menu(renderer, actionsProvider);
 
-  menu.addItem("test1", 1);
-  menu.addItem("test2", 2);
+  menu.addItem(MenuItem("item1", 1));
+  menu.addItem(MenuItem("item2", 2));
 
   TEST_ASSERT_EQUAL(menu.getItemsCount(), 2);
-  TEST_ASSERT_TRUE(menu.getItem(0).getName() == "test1");
-  TEST_ASSERT_TRUE(menu.getItem(1).getName() == "test2");
+  TEST_ASSERT_TRUE(menu.getItem(0).getName() == "item1");
+  TEST_ASSERT_TRUE(menu.getItem(1).getName() == "item2");
 }
 
 int main(int argc, char const *argv[]) {
