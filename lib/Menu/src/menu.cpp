@@ -55,7 +55,7 @@ void MenuItem::setValue(int value) {
 }
 
 Menu::Menu(MenuRenderer & renderer, MenuActionsProvider & actionsProvider) : renderer(renderer), actionsProvider(actionsProvider) {
-  this->currentNode = NULL;
+  this->selectedNode = NULL;
   this->root = NULL;
   this->isItemSelected = false;
 }
@@ -65,7 +65,7 @@ void Menu::addItem(const MenuItem item) {
     root = new MenuNode(item);
     root->setNext(root);
     root->setPrevious(root);
-    currentNode = root;
+    selectedNode = root;
   } else {
     MenuNode *last = root;
     while (last->getNext() != root) {
@@ -80,7 +80,14 @@ void Menu::addItem(const MenuItem item) {
 }
 
 void Menu::render() {
-  this->renderer.render(this->root);
+  this->renderer.renderStart();
+  MenuNode *current = root;
+  do {
+    MenuItem &item = current->getItem();
+    this->renderer.renderItem(item, current == selectedNode);
+    current = current->getNext();
+  } while (current != root);
+  this->renderer.renderFinish();
 }
 
 MenuItem& Menu::getItem(int i) const {
@@ -106,18 +113,21 @@ int Menu::getItemsCount() const {
 }
 
 void Menu::handle() {
-  if (this->actionsProvider.isSelectAction()) {
+  bool handledAction = false;
+  if (this->actionsProvider.isToggleModeAction()) {
     if (isItemSelected) {
-      currentNode->getItem().setValue(currentNode->getItem().getValue() + 1);
+      // currentNode->getItem().setValue(currentNode->getItem().getValue() + 1);
     } else {
-      this->currentNode = this->currentNode->getNext();
+      this->selectedNode = this->selectedNode->getNext();
     }
-    render();
-    this->actionsProvider.afterActionHandler();
+    handledAction = true;
   }
 
   if (this->actionsProvider.isNextAction()) {
-    isItemSelected = !isItemSelected;
+    this->selectedNode = this->selectedNode->getNext();
+    handledAction = true;
+  }
+  if (handledAction) {
     render();
     this->actionsProvider.afterActionHandler();
   }

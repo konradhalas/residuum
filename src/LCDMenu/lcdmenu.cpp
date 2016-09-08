@@ -6,25 +6,26 @@
 
 #include "lcdmenu.h"
 
-void LCDMenuRenderer::render(MenuNode *node) {
-  display.clearDisplay();
-  display.setTextSize(1);
-  display.setTextColor(BLACK);
-  display.setCursor(0, 0);
-  MenuNode *current = node;
-  do {
-    MenuItem &item = current->getItem();
-    display.println(item.getName() + " = " + item.getValue());
-    current = current->getNext();
-  } while (current != node);
-  display.display();
-}
-
 void LCDMenuRenderer::setup(int lcdLedPin) {
   pinMode(lcdLedPin, OUTPUT);
   analogWrite(lcdLedPin, 255);
   display.begin();
   display.setContrast(60);
+}
+
+void LCDMenuRenderer::renderStart() {
+  display.clearDisplay();
+  display.setTextSize(1);
+  display.setTextColor(BLACK);
+  display.setCursor(0, 0);
+}
+
+void LCDMenuRenderer::renderItem(const MenuItem &item, bool isSelected) {
+    display.println((isSelected ? ">" : " ") + item.getName() + " = " + item.getValue());
+}
+
+void LCDMenuRenderer::renderFinish() {
+  display.display();
 }
 
 ArduinoMenuActionsProvider::ArduinoMenuActionsProvider(int firstButton, int secondButton, int buttonsDealy) {
@@ -35,7 +36,7 @@ ArduinoMenuActionsProvider::ArduinoMenuActionsProvider(int firstButton, int seco
   pinMode(secondButton, INPUT);
 }
 
-bool ArduinoMenuActionsProvider::isSelectAction() {
+bool ArduinoMenuActionsProvider::isToggleModeAction() {
   return digitalRead(this->secondButton) == HIGH;
 };
 

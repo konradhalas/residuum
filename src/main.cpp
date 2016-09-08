@@ -28,7 +28,7 @@ void setup()   {
 
   menu.addItem(MenuItem("VAL A", 10));
   menu.addItem(MenuItem("VAL B", 20));
-  menu.addItem(MenuItem("VALUE C", 100));
+  menu.addItem(MenuItem("VAL C", 100));
   menu.render();
 }
 

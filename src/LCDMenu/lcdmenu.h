@@ -8,9 +8,10 @@
 class LCDMenuRenderer: public MenuRenderer {
   public:
     LCDMenuRenderer(Adafruit_PCD8544 &display): display(display) {}
-    void render(MenuNode *node);
     void setup(int lcdLedPin);
-
+    void renderItem(const MenuItem &item, bool isSelected);
+    void renderStart();
+    void renderFinish();
   private:
     Adafruit_PCD8544 &display;
 };
@@ -18,7 +19,7 @@ class LCDMenuRenderer: public MenuRenderer {
 class ArduinoMenuActionsProvider: public MenuActionsProvider {
   public:
     ArduinoMenuActionsProvider(int firstButton, int secondButton, int buttonsDealy);
-    bool isSelectAction();
+    bool isToggleModeAction();
     bool isNextAction();
     void afterActionHandler();
   private:
