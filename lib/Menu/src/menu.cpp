@@ -57,7 +57,7 @@ void MenuItem::setValue(int value) {
 Menu::Menu(MenuRenderer & renderer, MenuActionsProvider & actionsProvider) : renderer(renderer), actionsProvider(actionsProvider) {
   this->selectedNode = NULL;
   this->root = NULL;
-  this->isItemSelected = false;
+  this->isEditMode = false;
 }
 
 void Menu::addItem(const MenuItem item) {
@@ -80,7 +80,7 @@ void Menu::addItem(const MenuItem item) {
 }
 
 void Menu::render() {
-  this->renderer.renderStart();
+  this->renderer.renderStart(this->isEditMode);
   MenuNode *current = root;
   do {
     MenuItem &item = current->getItem();
@@ -114,12 +114,9 @@ int Menu::getItemsCount() const {
 
 void Menu::handle() {
   bool handledAction = false;
-  if (this->actionsProvider.isToggleModeAction()) {
-    if (isItemSelected) {
-      // currentNode->getItem().setValue(currentNode->getItem().getValue() + 1);
-    } else {
-      this->selectedNode = this->selectedNode->getNext();
-    }
+
+  if (this->actionsProvider.isToggleEditModeAction()) {
+    this->isEditMode = !this->isEditMode;
     handledAction = true;
   }
 
@@ -127,6 +124,7 @@ void Menu::handle() {
     this->selectedNode = this->selectedNode->getNext();
     handledAction = true;
   }
+
   if (handledAction) {
     render();
     this->actionsProvider.afterActionHandler();

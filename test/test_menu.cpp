@@ -7,34 +7,36 @@ class TestMenuRenderer: public MenuRenderer {
   public:
     void renderItem(const MenuItem &item, bool isSelected) {
         if (isSelected) {
-          selectedNodeNumber = renderedItemsCount;
+          this->selectedNodeNumber = this->renderedItemsCount;
         }
-        ++renderedItemsCount;
+        ++this->renderedItemsCount;
     };
-    void renderStart() {
-      renderedItemsCount = 0;
-      selectedNodeNumber = -1;
+    void renderStart(bool isEditMode) {
+      this->renderedItemsCount = 0;
+      this->selectedNodeNumber = -1;
+      this->isEditMode = isEditMode;
     };
     void renderFinish() {};
     int renderedItemsCount;
     int selectedNodeNumber;
+    bool isEditMode;
 };
 
 class TestMenuActionsProvider: public MenuActionsProvider {
   public:
-    TestMenuActionsProvider(bool selectAction = false, bool nextAction = false) {
-      this->selectAction = selectAction;
+    TestMenuActionsProvider(bool toggleEditModeAction = false, bool nextAction = false) {
+      this->toggleEditModeAction = toggleEditModeAction;
       this->nextAction = nextAction;
     }
-    bool isToggleModeAction() {
-      return selectAction;
+    bool isToggleEditModeAction() {
+      return toggleEditModeAction;
     };
     bool isNextAction() {
       return nextAction;
     };
     void afterActionHandler() {
     };
-    bool selectAction;
+    bool toggleEditModeAction;
     bool nextAction;
 };
 
@@ -97,12 +99,26 @@ void test_handle_next_action_with_many_item() {
   TEST_ASSERT_EQUAL(renderer.selectedNodeNumber, 1);
 }
 
+void test_handle_toggle_edit_mode_action() {
+  TestMenuRenderer renderer = TestMenuRenderer();
+  TestMenuActionsProvider actionsProvider = TestMenuActionsProvider(true, false);
+  Menu menu = Menu(renderer, actionsProvider);
+  menu.addItem(MenuItem("item", 1));
+
+  menu.handle();
+
+  TEST_ASSERT_EQUAL(renderer.selectedNodeNumber, 0);
+  TEST_ASSERT_TRUE(renderer.isEditMode);
+}
+
 int main(int argc, char const *argv[]) {
   UNITY_BEGIN();
   RUN_TEST(test_add_single_item);
   RUN_TEST(test_add_many_item);
   RUN_TEST(test_render_with_single_item);
+  RUN_TEST(test_handle_next_action_with_single_item);
   RUN_TEST(test_handle_next_action_with_many_item);
+  RUN_TEST(test_handle_toggle_edit_mode_action);
   UNITY_END();
   return 0;
 }

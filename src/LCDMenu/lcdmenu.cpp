@@ -13,15 +13,24 @@ void LCDMenuRenderer::setup(int lcdLedPin) {
   display.setContrast(60);
 }
 
-void LCDMenuRenderer::renderStart() {
+void LCDMenuRenderer::renderStart(bool isEditMode) {
   display.clearDisplay();
   display.setTextSize(1);
   display.setTextColor(BLACK);
   display.setCursor(0, 0);
+  this->isEditMode = isEditMode;
 }
 
 void LCDMenuRenderer::renderItem(const MenuItem &item, bool isSelected) {
-    display.println((isSelected ? ">" : " ") + item.getName() + " = " + item.getValue());
+    String prefix = " ";
+    if (isSelected) {
+      if (this->isEditMode) {
+        prefix = '#';
+      } else {
+        prefix = ">";
+      }
+    }
+    display.println(prefix + item.getName() + " = " + item.getValue());
 }
 
 void LCDMenuRenderer::renderFinish() {
@@ -36,7 +45,7 @@ ArduinoMenuActionsProvider::ArduinoMenuActionsProvider(int firstButton, int seco
   pinMode(secondButton, INPUT);
 }
 
-bool ArduinoMenuActionsProvider::isToggleModeAction() {
+bool ArduinoMenuActionsProvider::isToggleEditModeAction() {
   return digitalRead(this->secondButton) == HIGH;
 };
 
