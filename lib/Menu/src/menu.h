@@ -1,8 +1,26 @@
 #ifndef MENU_H
 #define MENU_H
 
-#include <Adafruit_GFX.h>
-#include <Adafruit_PCD8544.h>
+#ifdef ARDUINO
+#include <WString.h>
+#else
+#include <string>
+typedef std::string String;
+#endif
+
+class Menu;
+
+class MenuRenderer {
+  public:
+    virtual void render(Menu &menu) = 0;
+};
+
+class MenuActionsProvider {
+  public:
+    virtual bool isSelectAction() = 0;
+    virtual bool isNextAction() = 0;
+    virtual void afterActionHandler() = 0;
+};
 
 class MenuItem {
   public:
@@ -19,22 +37,22 @@ class MenuItem {
 class MenuNode {
   public:
     MenuNode(MenuItem *item);
-    boolean hasNext();
+    bool hasNext();
     MenuNode* getNext();
-    boolean hasPrevious();
+    bool hasPrevious();
     MenuNode* getPrevious();
     void setNext(MenuNode *node);
     void setPrevious(MenuNode *node);
     MenuItem* getItem();
   private:
     MenuItem *item;
-    MenuNode *next = NULL;
-    MenuNode *previous = NULL;
+    MenuNode *next;
+    MenuNode *previous;
 };
 
 class Menu {
   public:
-    Menu(Adafruit_PCD8544 & display, int selectButtonPin, int nextButtonPin);
+    Menu(MenuRenderer & renderer, MenuActionsProvider & actionsProvider);
     void addItem(String variable, int value);
     void render();
     void nextItem();
@@ -42,14 +60,14 @@ class Menu {
     void toggleSelectItem();
     void handle();
     void incrementSelectedItem();
+    MenuItem& getItem(int i);
+    int getItemsCount();
   private:
-    Adafruit_PCD8544 & display;
-    int selectButtonPin;
-    int nextButtonPin;
-    MenuNode *currentNode = NULL;
-    bool isItemSelected = false;
-
-    MenuNode *root = NULL;
+    MenuNode *currentNode;
+    bool isItemSelected;
+    MenuNode *root;
+    MenuRenderer &renderer;
+    MenuActionsProvider &actionsProvider;
 };
 
 #endif

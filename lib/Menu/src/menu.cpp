@@ -1,17 +1,23 @@
-#include <Arduino.h>
-#include <menu.h>
+#ifdef ARDUINO
+#include <WString.h>
+#else
+#include <string>
+typedef std::string String;
+#endif
 
-#define BUTTONS_DELAY 500
+#include <menu.h>
 
 MenuNode::MenuNode(MenuItem *item) {
   this->item = item;
+  this->previous = NULL;
+  this->next = NULL;
 }
 
 MenuItem* MenuNode::getItem() {
   return item;
 }
 
-boolean MenuNode::hasNext() {
+bool MenuNode::hasNext() {
   return next != NULL;
 }
 
@@ -19,7 +25,7 @@ MenuNode* MenuNode::getNext() {
   return next;
 }
 
-boolean MenuNode::hasPrevious() {
+bool MenuNode::hasPrevious() {
   return previous != NULL;
 }
 
@@ -52,15 +58,14 @@ void MenuItem::setValue(int value) {
   this->value = value;
 }
 
-Menu::Menu(Adafruit_PCD8544 & display, int selectButtonPin, int nextButtonPin) : display(display) {
-  this->selectButtonPin = selectButtonPin;
-  this->nextButtonPin = nextButtonPin;
-  pinMode(selectButtonPin, INPUT);
-  pinMode(nextButtonPin, INPUT);
+Menu::Menu(MenuRenderer & renderer, MenuActionsProvider & actionsProvider) : renderer(renderer), actionsProvider(actionsProvider) {
+  this->currentNode = NULL;
+  this->root = NULL;
+  this->isItemSelected = false;
 }
 
 void Menu::addItem(String itemName, int value) {
-  itemName.remove(5);
+  // itemName.remove(5);
 
   MenuItem *item = new MenuItem(itemName, value);
 
@@ -83,28 +88,29 @@ void Menu::addItem(String itemName, int value) {
 }
 
 void Menu::render() {
-  this->display.clearDisplay();
-  this->display.setTextSize(1);
-  this->display.setTextColor(BLACK);
-  this->display.setCursor(0, 0);
+  this->renderer.render(*this);
+}
+
+MenuItem& Menu::getItem(int i) {
+  int count = 0;
   MenuNode *current = root;
-  if (current) {
-    do {
-      String prefix;
-      if (current == currentNode) {
-        if (isItemSelected) {
-          prefix = "#";
-        } else {
-          prefix = ">";
-        }
-      } else {
-        prefix = " ";
-      }
-      this->display.println(prefix + current->getItem()->getName() + " = " + current->getItem()->getValue());
-      current = current->getNext();
-    } while (current != root);
+  while (current->getNext() != root && count < i) {
+    ++count;
+    current = current->getNext();
   }
-  this->display.display();
+  return *current->getItem();
+}
+
+int Menu::getItemsCount() {
+  int count = 0;
+  if (root != NULL) {
+    MenuNode *current = root;
+    do {
+      ++count;
+      current = current->getNext();
+    } while(current != root);
+  }
+  return count;
 }
 
 void Menu::nextItem() {
@@ -124,21 +130,19 @@ void Menu::incrementSelectedItem() {
 }
 
 void Menu::handle() {
-  int selectButtonState = digitalRead(selectButtonPin);
-  int nextButtonState = digitalRead(nextButtonPin);
-  if (selectButtonState == HIGH) {
+  if (this->actionsProvider.isSelectAction()) {
     if (isItemSelected) {
       incrementSelectedItem();
     } else {
       nextItem();
     }
     render();
-    delay(BUTTONS_DELAY);
+    this->actionsProvider.afterActionHandler();
   }
 
-  if (nextButtonState == HIGH) {
+  if (this->actionsProvider.isNextAction()) {
     toggleSelectItem();
     render();
-    delay(BUTTONS_DELAY);
+    this->actionsProvider.afterActionHandler();
   }
 }

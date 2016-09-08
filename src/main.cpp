@@ -11,9 +11,50 @@
 #define SECOND_BUTTON_PIN 13
 #define LED_PIN 11
 
+#define BUTTONS_DELAY 500
+
 Adafruit_PCD8544 display = Adafruit_PCD8544(8, 10, 9);
 
-Menu menu = Menu(display, FIRST_BUTTON_PIN, SECOND_BUTTON_PIN);
+class LCDMenuRenderer: public MenuRenderer {
+  public:
+    LCDMenuRenderer(Adafruit_PCD8544 &display): display(display) {
+
+    }
+    void render(Menu &menu) {
+      display.clearDisplay();
+      display.setTextSize(1);
+      display.setTextColor(BLACK);
+      display.setCursor(0, 0);
+      for (int i = 0; i < menu.getItemsCount(); i++) {
+        MenuItem &item = menu.getItem(i);
+        display.println(item.getName() + " = " + item.getValue());
+      }
+      display.display();
+    }
+  private:
+    Adafruit_PCD8544 &display;
+};
+
+class ArduinoMenuActionsProvider: public MenuActionsProvider {
+  public:
+    ArduinoMenuActionsProvider() {
+      pinMode(SECOND_BUTTON_PIN, INPUT);
+      pinMode(FIRST_BUTTON_PIN, INPUT);
+    }
+    bool isSelectAction() {
+      return digitalRead(SECOND_BUTTON_PIN) == HIGH;
+    };
+    bool isNextAction() {
+      return digitalRead(FIRST_BUTTON_PIN) == HIGH;
+    };
+    void afterActionHandler() {
+      delay(BUTTONS_DELAY);
+    };
+};
+
+LCDMenuRenderer renderer = LCDMenuRenderer(display);
+ArduinoMenuActionsProvider actionsProvider = ArduinoMenuActionsProvider();
+Menu menu = Menu(renderer, actionsProvider);
 
 void initializeDisplay() {
   pinMode(LCD_LED_PIN, OUTPUT);
