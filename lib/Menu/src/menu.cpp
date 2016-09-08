@@ -118,10 +118,12 @@ void Menu::handle() {
   if (this->actionsProvider.isToggleEditModeAction()) {
     this->isEditMode = !this->isEditMode;
     handledAction = true;
-  }
-
-  if (this->actionsProvider.isNextAction()) {
-    this->selectedNode = this->selectedNode->getNext();
+  } else if (this->actionsProvider.isNextAction()) {
+    if (this->isEditMode) {
+      // TODO: handle by menu item
+    } else {
+      this->selectedNode = this->selectedNode->getNext();
+    }
     handledAction = true;
   }
 

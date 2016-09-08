@@ -111,6 +111,21 @@ void test_handle_toggle_edit_mode_action() {
   TEST_ASSERT_TRUE(renderer.isEditMode);
 }
 
+void test_handle_next_action_when_edit_mode() {
+  TestMenuRenderer renderer = TestMenuRenderer();
+  TestMenuActionsProvider actionsProvider = TestMenuActionsProvider(true, false);
+  Menu menu = Menu(renderer, actionsProvider);
+  menu.addItem(MenuItem("item1", 1));
+  menu.addItem(MenuItem("item2", 1));
+
+  menu.handle();
+  actionsProvider.toggleEditModeAction = false;
+  actionsProvider.nextAction = true;
+  menu.handle();
+
+  TEST_ASSERT_EQUAL(renderer.selectedNodeNumber, 0);
+}
+
 int main(int argc, char const *argv[]) {
   UNITY_BEGIN();
   RUN_TEST(test_add_single_item);
@@ -119,6 +134,7 @@ int main(int argc, char const *argv[]) {
   RUN_TEST(test_handle_next_action_with_single_item);
   RUN_TEST(test_handle_next_action_with_many_item);
   RUN_TEST(test_handle_toggle_edit_mode_action);
+  RUN_TEST(test_handle_next_action_when_edit_mode);
   UNITY_END();
   return 0;
 }
