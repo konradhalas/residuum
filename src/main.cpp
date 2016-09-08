@@ -20,7 +20,7 @@ class LCDMenuRenderer: public MenuRenderer {
     LCDMenuRenderer(Adafruit_PCD8544 &display): display(display) {
 
     }
-    void render(Menu &menu) {
+    void render(const Menu &menu) {
       display.clearDisplay();
       display.setTextSize(1);
       display.setTextColor(BLACK);

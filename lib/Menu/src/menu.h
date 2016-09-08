@@ -12,7 +12,7 @@ class Menu;
 
 class MenuRenderer {
   public:
-    virtual void render(Menu &menu) = 0;
+    virtual void render(const Menu &menu) = 0;
 };
 
 class MenuActionsProvider {
@@ -26,8 +26,8 @@ class MenuItem {
   public:
     MenuItem(String name, int value);
     MenuItem(const MenuItem &item);
-    String getName();
-    int getValue();
+    String getName() const;
+    int getValue() const;
     void setValue(int value);
 
   private:
@@ -38,9 +38,7 @@ class MenuItem {
 class MenuNode {
   public:
     MenuNode(const MenuItem item);
-    bool hasNext();
     MenuNode* getNext();
-    bool hasPrevious();
     MenuNode* getPrevious();
     void setNext(MenuNode *node);
     void setPrevious(MenuNode *node);
@@ -55,14 +53,10 @@ class Menu {
   public:
     Menu(MenuRenderer & renderer, MenuActionsProvider & actionsProvider);
     void addItem(const MenuItem item);
+    MenuItem& getItem(int i) const;
     void render();
-    void nextItem();
-    void previousItem();
-    void toggleSelectItem();
     void handle();
-    void incrementSelectedItem();
-    MenuItem& getItem(int i);
-    int getItemsCount();
+    int getItemsCount() const;
   private:
     MenuNode *currentNode;
     bool isItemSelected;

@@ -16,16 +16,8 @@ MenuItem & MenuNode::getItem() {
   return item;
 }
 
-bool MenuNode::hasNext() {
-  return next != NULL;
-}
-
 MenuNode* MenuNode::getNext() {
   return next;
-}
-
-bool MenuNode::hasPrevious() {
-  return previous != NULL;
 }
 
 MenuNode* MenuNode::getPrevious() {
@@ -50,11 +42,11 @@ MenuItem::MenuItem(String name, int value) {
   this->value = value;
 }
 
-String MenuItem::getName() {
+String MenuItem::getName() const {
   return name;
 }
 
-int MenuItem::getValue() {
+int MenuItem::getValue() const {
   return value;
 }
 
@@ -91,7 +83,7 @@ void Menu::render() {
   this->renderer.render(*this);
 }
 
-MenuItem& Menu::getItem(int i) {
+MenuItem& Menu::getItem(int i) const {
   int count = 0;
   MenuNode *current = root;
   while (current->getNext() != root && count < i) {
@@ -101,7 +93,7 @@ MenuItem& Menu::getItem(int i) {
   return current->getItem();
 }
 
-int Menu::getItemsCount() {
+int Menu::getItemsCount() const {
   int count = 0;
   if (root != NULL) {
     MenuNode *current = root;
@@ -113,35 +105,19 @@ int Menu::getItemsCount() {
   return count;
 }
 
-void Menu::nextItem() {
-  this->currentNode = this->currentNode->getNext();
-}
-
-void Menu::previousItem() {
-  this->currentNode = this->currentNode->getPrevious();
-}
-
-void Menu::toggleSelectItem() {
-  isItemSelected = !isItemSelected;
-}
-
-void Menu::incrementSelectedItem() {
-  currentNode->getItem().setValue(currentNode->getItem().getValue() + 1);
-}
-
 void Menu::handle() {
   if (this->actionsProvider.isSelectAction()) {
     if (isItemSelected) {
-      incrementSelectedItem();
+      currentNode->getItem().setValue(currentNode->getItem().getValue() + 1);
     } else {
-      nextItem();
+      this->currentNode = this->currentNode->getNext();
     }
     render();
     this->actionsProvider.afterActionHandler();
   }
 
   if (this->actionsProvider.isNextAction()) {
-    toggleSelectItem();
+    isItemSelected = !isItemSelected;
     render();
     this->actionsProvider.afterActionHandler();
   }
