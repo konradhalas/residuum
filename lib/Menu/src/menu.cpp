@@ -121,12 +121,41 @@ void Menu::addItem(MenuItem *item) {
 void Menu::render() {
   this->renderer.renderStart(this->isEditMode);
   MenuNode *current = root;
+
+  int currentItemIndex = -1;
+  int selectedItemIndex = this->getSelectedItemIndex();
+
+  int startItemIndex, endItemIndex;
+  if (this->renderer.getItemsLimit() == 0) {
+    startItemIndex = 0;
+    endItemIndex = this->getItemsCount() - 1;
+  } else {
+    startItemIndex = (selectedItemIndex / this->renderer.getItemsLimit()) * this->renderer.getItemsLimit();
+    endItemIndex = startItemIndex + this->renderer.getItemsLimit() - 1;
+  }
+
   do {
-    MenuItem *item = current->getItem();
-    item->renderDispatch(this->renderer, current == selectedNode);
+    ++currentItemIndex;
+    if (startItemIndex <= currentItemIndex && endItemIndex >= currentItemIndex) {
+      MenuItem *item = current->getItem();
+      item->renderDispatch(this->renderer, current == selectedNode);
+    }
     current = current->getNext();
   } while (current != root);
   this->renderer.renderFinish();
+}
+
+int Menu::getSelectedItemIndex() const {
+  if (root == NULL) {
+    return -1;
+  }
+  int selectedItemIndex = 0;
+  MenuNode *current = root;
+  while (current != this->selectedNode) {
+    current = current->getNext();
+    ++selectedItemIndex;
+  }
+  return selectedItemIndex;
 }
 
 MenuItem* Menu::getItem(int i) const {

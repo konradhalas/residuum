@@ -25,9 +25,20 @@ void setup()   {
   Serial.begin(9600);
 
   renderer.setup(LCD_LED_PIN);
-  menu.addItem(new IntegerValueMenuItem("VAL A", 10));
-  menu.addItem(new IntegerValueMenuItem("VAL B", 20));
-  menu.addItem(new IntegerValueMenuItem("VAL C", 100));
+  menu.addItem(new IntegerValueMenuItem("VAL 1", 10));
+  menu.addItem(new IntegerValueMenuItem("VAL 2", 20));
+  menu.addItem(new IntegerValueMenuItem("VAL 3", 100));
+  menu.addItem(new IntegerValueMenuItem("VAL 4", 200));
+  menu.addItem(new IntegerValueMenuItem("VAL 5", 300));
+  menu.addItem(new IntegerValueMenuItem("VAL 6", 100));
+  menu.addItem(new IntegerValueMenuItem("VAL 7", 10));
+  menu.addItem(new IntegerValueMenuItem("VAL 8", 20));
+  menu.addItem(new IntegerValueMenuItem("VAL 9", 100));
+  menu.addItem(new IntegerValueMenuItem("VAL 10", 200));
+  menu.addItem(new IntegerValueMenuItem("VAL 11", 300));
+  menu.addItem(new IntegerValueMenuItem("VAL 12", 100));
+  menu.addItem(new IntegerValueMenuItem("VAL 13", 300));
+  menu.addItem(new IntegerValueMenuItem("VAL 12", 100));
   menu.addItem(new ActionMenuItem("START", NULL));
   menu.render();
 }

@@ -23,6 +23,7 @@ class TestMenuRenderer: public MenuRenderer {
       this->isEditMode = isEditMode;
     };
     void renderFinish() {};
+    int getItemsLimit() { return 5; };
     int renderedItemsCount;
     int selectedNodeNumber;
     bool isEditMode;
@@ -89,6 +90,22 @@ void test_render_with_single_item() {
 
   TEST_ASSERT_EQUAL(renderer.renderedItemsCount, 1);
   TEST_ASSERT_EQUAL(renderer.selectedNodeNumber, 0);
+}
+
+void test_render_with_more_items_above_limit() {
+  TestMenuRenderer renderer = TestMenuRenderer();
+  TestMenuActionsProvider actionsProvider = TestMenuActionsProvider(false, true);
+  Menu menu = Menu(renderer, actionsProvider);
+  for (int i = 0; i < 10; ++i) {
+    menu.addItem(new IntegerValueMenuItem("item", 1));
+  }
+
+  for (int i = 0; i < 9; ++i) {
+    menu.handle();
+  }
+
+  TEST_ASSERT_EQUAL(5, renderer.renderedItemsCount);
+  TEST_ASSERT_EQUAL(4, renderer.selectedNodeNumber);
 }
 
 void test_handle_next_action_with_single_item() {
@@ -161,6 +178,7 @@ int main(int argc, char const *argv[]) {
   RUN_TEST(test_add_single_item);
   RUN_TEST(test_add_many_item);
   RUN_TEST(test_render_with_single_item);
+  RUN_TEST(test_render_with_more_items_above_limit);
   RUN_TEST(test_handle_next_action_with_single_item);
   RUN_TEST(test_handle_next_action_with_many_item);
   RUN_TEST(test_handle_toggle_edit_mode_action_with_editable_item);

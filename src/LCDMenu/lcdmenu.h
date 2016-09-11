@@ -13,6 +13,7 @@ class LCDMenuRenderer: public MenuRenderer {
     void renderItem(const ActionMenuItem &item, bool isSelected);
     void renderStart(bool isEditMode);
     void renderFinish();
+    int getItemsLimit() { return 6; };
   private:
     String getItemPrefix(bool isSelected);
     Adafruit_PCD8544 &display;

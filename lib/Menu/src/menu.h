@@ -19,6 +19,7 @@ class MenuRenderer {
     virtual void renderItem(const ActionMenuItem &item, bool isSelected) = 0;
     virtual void renderStart(bool isEditMode) = 0;
     virtual void renderFinish() = 0;
+    virtual int getItemsLimit() { return 0; };
 };
 
 class MenuActionsProvider {
@@ -94,6 +95,7 @@ class Menu {
     void handle();
     MenuItem* getItem(int i) const;
     int getItemsCount() const;
+    int getSelectedItemIndex() const;
     ~Menu();
   private:
     MenuNode *root;
