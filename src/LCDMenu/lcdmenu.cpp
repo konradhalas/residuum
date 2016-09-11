@@ -25,6 +25,10 @@ void LCDMenuRenderer::renderItem(const IntegerValueMenuItem &item, bool isSelect
     display.println(this->getItemPrefix(isSelected) + item.getName() + " = " + item.getValue());
 }
 
+void LCDMenuRenderer::renderItem(const BoolValueMenuItem &item, bool isSelected) {
+    display.println(this->getItemPrefix(isSelected) + item.getName() + " = " + (item.getValue() ? "ON" : "OFF"));
+}
+
 void LCDMenuRenderer::renderItem(const ActionMenuItem &item, bool isSelected) {
     display.println(this->getItemPrefix(isSelected) + item.getName());
 }

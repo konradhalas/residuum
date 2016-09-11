@@ -36,51 +36,38 @@ void MenuNode::setPrevious(MenuNode *node) {
   this->previous = node;
 }
 
-IntegerValueMenuItem::IntegerValueMenuItem(const IntegerValueMenuItem &item) {
-    this->name = item.name;
-    this->value = item.value;
-}
-
-IntegerValueMenuItem::IntegerValueMenuItem(String name, int value, Command<IntegerValueMenuItem> *onValueChangeCommand) {
-  this->name = name;
-  this->value = value;
+IntegerValueMenuItem::IntegerValueMenuItem(String name, int value, Command<IntegerValueMenuItem> *onValueChangeCommand) : ValueMenuItem<int>(name, value) {
   this->onValueChangeCommand = onValueChangeCommand;
 }
 
-String IntegerValueMenuItem::getName() const {
-  return name;
-}
-
-int IntegerValueMenuItem::getValue() const {
-  return value;
-}
-
-void IntegerValueMenuItem::setValue(int value) {
-  this->value = value;
-}
-
 void IntegerValueMenuItem::handleNextAction() {
-  ++this->value;
+  this->setValue(this->getValue() + 1);
   if (this->onValueChangeCommand != NULL) {
     this->onValueChangeCommand->run(*this);
   }
-}
-
-bool IntegerValueMenuItem::handleEditAction() {
-  return true;
 }
 
 void IntegerValueMenuItem::renderDispatch(MenuRenderer &renderer, bool isSelected) {
   renderer.renderItem(*this, isSelected);
 }
 
-ActionMenuItem::ActionMenuItem(String name, Command<ActionMenuItem> *command) {
-  this->name = name;
-  this->command = command;
+BoolValueMenuItem::BoolValueMenuItem(String name, bool value, Command<BoolValueMenuItem> *onValueChangeCommand) : ValueMenuItem<bool>(name, value) {
+  this->onValueChangeCommand = onValueChangeCommand;
 }
 
-String ActionMenuItem::getName() const {
-  return name;
+void BoolValueMenuItem::handleNextAction() {
+  this->setValue(!this->getValue());
+  if (this->onValueChangeCommand != NULL) {
+    this->onValueChangeCommand->run(*this);
+  }
+}
+
+void BoolValueMenuItem::renderDispatch(MenuRenderer &renderer, bool isSelected) {
+  renderer.renderItem(*this, isSelected);
+}
+
+ActionMenuItem::ActionMenuItem(String name, Command<ActionMenuItem> *command) : MenuItem(name) {
+  this->command = command;
 }
 
 void ActionMenuItem::renderDispatch(MenuRenderer &renderer, bool isSelected) {

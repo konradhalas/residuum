@@ -8,6 +8,9 @@ class TestMenuRenderer: public MenuRenderer {
     void renderItem(const IntegerValueMenuItem &item, bool isSelected) {
       this->renderItem(isSelected);
     };
+    void renderItem(const BoolValueMenuItem &item, bool isSelected) {
+      this->renderItem(isSelected);
+    };
     void renderItem(const ActionMenuItem &item, bool isSelected){
       this->renderItem(isSelected);
     };
@@ -184,6 +187,16 @@ void test_integer_value_menu_item_handle_next_action() {
   TEST_ASSERT_TRUE(command->isAfterRun);
 }
 
+void test_bool_value_menu_item_handle_next_action() {
+  TestCommand<BoolValueMenuItem> *command = new TestCommand<BoolValueMenuItem>();
+  BoolValueMenuItem item = BoolValueMenuItem("item", false, command);
+
+  item.handleNextAction();
+
+  TEST_ASSERT_TRUE(item.getValue());
+  TEST_ASSERT_TRUE(command->isAfterRun);
+}
+
 int main(int argc, char const *argv[]) {
   UNITY_BEGIN();
   RUN_TEST(test_add_single_item);
@@ -196,6 +209,7 @@ int main(int argc, char const *argv[]) {
   RUN_TEST(test_handle_toggle_edit_mode_action_with_non_editable_item);
   RUN_TEST(test_handle_next_action_when_edit_mode);
   RUN_TEST(test_integer_value_menu_item_handle_next_action);
+  RUN_TEST(test_bool_value_menu_item_handle_next_action);
   UNITY_END();
   return 0;
 }
