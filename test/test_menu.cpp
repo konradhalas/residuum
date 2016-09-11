@@ -5,7 +5,7 @@
 
 class TestMenuRenderer: public MenuRenderer {
   public:
-    void renderItem(const MenuItem &item, bool isSelected) {
+    void renderItem(const IntegerValueMenuItem &item, bool isSelected) {
         if (isSelected) {
           this->selectedNodeNumber = this->renderedItemsCount;
         }
@@ -45,10 +45,10 @@ void test_add_single_item() {
   TestMenuActionsProvider actionsProvider = TestMenuActionsProvider();
   Menu menu = Menu(renderer, actionsProvider);
 
-  menu.addItem(MenuItem("item", 1));
+  menu.addItem(new IntegerValueMenuItem("item", 1));
 
   TEST_ASSERT_EQUAL(menu.getItemsCount(), 1);
-  TEST_ASSERT_TRUE(menu.getItem(0).getName() == "item");
+  TEST_ASSERT_TRUE(menu.getItem(0)->getName() == "item");
 }
 
 void test_add_many_item() {
@@ -56,19 +56,19 @@ void test_add_many_item() {
   TestMenuActionsProvider actionsProvider = TestMenuActionsProvider();
   Menu menu = Menu(renderer, actionsProvider);
 
-  menu.addItem(MenuItem("item1", 1));
-  menu.addItem(MenuItem("item2", 2));
+  menu.addItem(new IntegerValueMenuItem("item1", 1));
+  menu.addItem(new IntegerValueMenuItem("item2", 2));
 
   TEST_ASSERT_EQUAL(menu.getItemsCount(), 2);
-  TEST_ASSERT_TRUE(menu.getItem(0).getName() == "item1");
-  TEST_ASSERT_TRUE(menu.getItem(1).getName() == "item2");
+  TEST_ASSERT_TRUE(menu.getItem(0)->getName() == "item1");
+  TEST_ASSERT_TRUE(menu.getItem(1)->getName() == "item2");
 }
 
 void test_render_with_single_item() {
   TestMenuRenderer renderer = TestMenuRenderer();
   TestMenuActionsProvider actionsProvider = TestMenuActionsProvider();
   Menu menu = Menu(renderer, actionsProvider);
-  menu.addItem(MenuItem("item", 1));
+  menu.addItem(new IntegerValueMenuItem("item", 1));
 
   menu.render();
 
@@ -80,7 +80,7 @@ void test_handle_next_action_with_single_item() {
   TestMenuRenderer renderer = TestMenuRenderer();
   TestMenuActionsProvider actionsProvider = TestMenuActionsProvider(false, true);
   Menu menu = Menu(renderer, actionsProvider);
-  menu.addItem(MenuItem("item1", 1));
+  menu.addItem(new IntegerValueMenuItem("item1", 1));
 
   menu.handle();
 
@@ -91,8 +91,8 @@ void test_handle_next_action_with_many_item() {
   TestMenuRenderer renderer = TestMenuRenderer();
   TestMenuActionsProvider actionsProvider = TestMenuActionsProvider(false, true);
   Menu menu = Menu(renderer, actionsProvider);
-  menu.addItem(MenuItem("item1", 1));
-  menu.addItem(MenuItem("item2", 1));
+  menu.addItem(new IntegerValueMenuItem("item1", 1));
+  menu.addItem(new IntegerValueMenuItem("item2", 1));
 
   menu.handle();
 
@@ -103,7 +103,7 @@ void test_handle_toggle_edit_mode_action() {
   TestMenuRenderer renderer = TestMenuRenderer();
   TestMenuActionsProvider actionsProvider = TestMenuActionsProvider(true, false);
   Menu menu = Menu(renderer, actionsProvider);
-  menu.addItem(MenuItem("item", 1));
+  menu.addItem(new IntegerValueMenuItem("item", 1));
 
   menu.handle();
 
@@ -115,8 +115,9 @@ void test_handle_next_action_when_edit_mode() {
   TestMenuRenderer renderer = TestMenuRenderer();
   TestMenuActionsProvider actionsProvider = TestMenuActionsProvider(true, false);
   Menu menu = Menu(renderer, actionsProvider);
-  menu.addItem(MenuItem("item1", 1));
-  menu.addItem(MenuItem("item2", 1));
+  IntegerValueMenuItem *item = new IntegerValueMenuItem("item1", 1);
+  menu.addItem(item);
+  menu.addItem(new IntegerValueMenuItem("item2", 1));
 
   menu.handle();
   actionsProvider.toggleEditModeAction = false;
@@ -124,7 +125,7 @@ void test_handle_next_action_when_edit_mode() {
   menu.handle();
 
   TEST_ASSERT_EQUAL(renderer.selectedNodeNumber, 0);
-  TEST_ASSERT_EQUAL(menu.getItem(0).getValue(), 2);
+  TEST_ASSERT_EQUAL(item->getValue(), 2);
 }
 
 int main(int argc, char const *argv[]) {

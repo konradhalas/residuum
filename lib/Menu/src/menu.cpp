@@ -7,12 +7,16 @@ typedef std::string String;
 
 #include <menu.h>
 
-MenuNode::MenuNode(const MenuItem item): item(item) {
+MenuNode::MenuNode(MenuItem* item): item(item) {
   this->previous = NULL;
   this->next = NULL;
 }
 
-MenuItem & MenuNode::getItem() {
+MenuNode::~MenuNode() {
+  delete this->item;
+}
+
+MenuItem* MenuNode::getItem() {
   return item;
 }
 
@@ -32,30 +36,34 @@ void MenuNode::setPrevious(MenuNode *node) {
   this->previous = node;
 }
 
-MenuItem::MenuItem(const MenuItem &item) {
+IntegerValueMenuItem::IntegerValueMenuItem(const IntegerValueMenuItem &item) {
     this->name = item.name;
     this->value = item.value;
 }
 
-MenuItem::MenuItem(String name, int value) {
+IntegerValueMenuItem::IntegerValueMenuItem(String name, int value) {
   this->name = name;
   this->value = value;
 }
 
-String MenuItem::getName() const {
+String IntegerValueMenuItem::getName() const {
   return name;
 }
 
-int MenuItem::getValue() const {
+int IntegerValueMenuItem::getValue() const {
   return value;
 }
 
-void MenuItem::setValue(int value) {
+void IntegerValueMenuItem::setValue(int value) {
   this->value = value;
 }
 
-void MenuItem::handleNextAction() {
+void IntegerValueMenuItem::handleNextAction() {
   ++this->value;
+}
+
+void IntegerValueMenuItem::renderDispatch(MenuRenderer &renderer, bool isSelected) {
+  renderer.renderItem(*this, isSelected);
 }
 
 Menu::Menu(MenuRenderer & renderer, MenuActionsProvider & actionsProvider) : renderer(renderer), actionsProvider(actionsProvider) {
@@ -64,7 +72,7 @@ Menu::Menu(MenuRenderer & renderer, MenuActionsProvider & actionsProvider) : ren
   this->isEditMode = false;
 }
 
-void Menu::addItem(const MenuItem item) {
+void Menu::addItem(MenuItem *item) {
   if (root == NULL) {
     root = new MenuNode(item);
     root->setNext(root);
@@ -87,14 +95,14 @@ void Menu::render() {
   this->renderer.renderStart(this->isEditMode);
   MenuNode *current = root;
   do {
-    MenuItem &item = current->getItem();
-    this->renderer.renderItem(item, current == selectedNode);
+    MenuItem *item = current->getItem();
+    item->renderDispatch(this->renderer, current == selectedNode);
     current = current->getNext();
   } while (current != root);
   this->renderer.renderFinish();
 }
 
-MenuItem& Menu::getItem(int i) const {
+MenuItem* Menu::getItem(int i) const {
   int count = 0;
   MenuNode *current = root;
   while (current->getNext() != root && count < i) {
@@ -124,7 +132,7 @@ void Menu::handle() {
     handledAction = true;
   } else if (this->actionsProvider.isNextAction()) {
     if (this->isEditMode) {
-      this->selectedNode->getItem().handleNextAction();
+      this->selectedNode->getItem()->handleNextAction();
     } else {
       this->selectedNode = this->selectedNode->getNext();
     }
@@ -135,4 +143,17 @@ void Menu::handle() {
     render();
     this->actionsProvider.afterActionHandler();
   }
+}
+
+Menu::~Menu() {
+  if (root == NULL) {
+    return;
+  }
+  MenuNode *current = root;
+  MenuNode *next = NULL;
+  do {
+    next = current->getNext();
+    delete current;
+    current = next;
+  } while (current != root);
 }

@@ -21,7 +21,7 @@ void LCDMenuRenderer::renderStart(bool isEditMode) {
   this->isEditMode = isEditMode;
 }
 
-void LCDMenuRenderer::renderItem(const MenuItem &item, bool isSelected) {
+void LCDMenuRenderer::renderItem(const IntegerValueMenuItem &item, bool isSelected) {
     String prefix = " ";
     if (isSelected) {
       if (this->isEditMode) {
