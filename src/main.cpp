@@ -28,6 +28,7 @@ void setup()   {
   menu.addItem(new IntegerValueMenuItem("VAL A", 10));
   menu.addItem(new IntegerValueMenuItem("VAL B", 20));
   menu.addItem(new IntegerValueMenuItem("VAL C", 100));
+  menu.addItem(new ActionMenuItem("START", NULL));
   menu.render();
 }
 

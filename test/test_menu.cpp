@@ -6,10 +6,16 @@
 class TestMenuRenderer: public MenuRenderer {
   public:
     void renderItem(const IntegerValueMenuItem &item, bool isSelected) {
-        if (isSelected) {
-          this->selectedNodeNumber = this->renderedItemsCount;
-        }
-        ++this->renderedItemsCount;
+      this->renderItem(isSelected);
+    };
+    void renderItem(const ActionMenuItem &item, bool isSelected){
+      this->renderItem(isSelected);
+    };
+    void renderItem(bool isSelected) {
+      if (isSelected) {
+        this->selectedNodeNumber = this->renderedItemsCount;
+      }
+      ++this->renderedItemsCount;
     };
     void renderStart(bool isEditMode) {
       this->renderedItemsCount = 0;
@@ -38,6 +44,15 @@ class TestMenuActionsProvider: public MenuActionsProvider {
     };
     bool toggleEditModeAction;
     bool nextAction;
+};
+
+class TestCommand: public Command<ActionMenuItem> {
+  public:
+    TestCommand(): isAfterRun(false) {};
+    void run(const ActionMenuItem &item) {
+      isAfterRun = true;
+    }
+    bool isAfterRun;
 };
 
 void test_add_single_item() {
@@ -99,18 +114,6 @@ void test_handle_next_action_with_many_item() {
   TEST_ASSERT_EQUAL(renderer.selectedNodeNumber, 1);
 }
 
-void test_handle_toggle_edit_mode_action() {
-  TestMenuRenderer renderer = TestMenuRenderer();
-  TestMenuActionsProvider actionsProvider = TestMenuActionsProvider(true, false);
-  Menu menu = Menu(renderer, actionsProvider);
-  menu.addItem(new IntegerValueMenuItem("item", 1));
-
-  menu.handle();
-
-  TEST_ASSERT_EQUAL(renderer.selectedNodeNumber, 0);
-  TEST_ASSERT_TRUE(renderer.isEditMode);
-}
-
 void test_handle_next_action_when_edit_mode() {
   TestMenuRenderer renderer = TestMenuRenderer();
   TestMenuActionsProvider actionsProvider = TestMenuActionsProvider(true, false);
@@ -128,6 +131,31 @@ void test_handle_next_action_when_edit_mode() {
   TEST_ASSERT_EQUAL(item->getValue(), 2);
 }
 
+void test_handle_toggle_edit_mode_action_with_editable_item() {
+  TestMenuRenderer renderer = TestMenuRenderer();
+  TestMenuActionsProvider actionsProvider = TestMenuActionsProvider(true, false);
+  Menu menu = Menu(renderer, actionsProvider);
+  menu.addItem(new IntegerValueMenuItem("item", 1));
+
+  menu.handle();
+
+  TEST_ASSERT_EQUAL(renderer.selectedNodeNumber, 0);
+  TEST_ASSERT_TRUE(renderer.isEditMode);
+}
+
+void test_handle_toggle_edit_mode_action_with_non_editable_item() {
+  TestMenuRenderer renderer = TestMenuRenderer();
+  TestMenuActionsProvider actionsProvider = TestMenuActionsProvider(true, false);
+  Menu menu = Menu(renderer, actionsProvider);
+  TestCommand *command = new TestCommand();
+  menu.addItem(new ActionMenuItem("item", command));
+
+  menu.handle();
+
+  TEST_ASSERT_FALSE(renderer.isEditMode);
+  TEST_ASSERT_TRUE(command->isAfterRun);
+}
+
 int main(int argc, char const *argv[]) {
   UNITY_BEGIN();
   RUN_TEST(test_add_single_item);
@@ -135,7 +163,8 @@ int main(int argc, char const *argv[]) {
   RUN_TEST(test_render_with_single_item);
   RUN_TEST(test_handle_next_action_with_single_item);
   RUN_TEST(test_handle_next_action_with_many_item);
-  RUN_TEST(test_handle_toggle_edit_mode_action);
+  RUN_TEST(test_handle_toggle_edit_mode_action_with_editable_item);
+  RUN_TEST(test_handle_toggle_edit_mode_action_with_non_editable_item);
   RUN_TEST(test_handle_next_action_when_edit_mode);
   UNITY_END();
   return 0;

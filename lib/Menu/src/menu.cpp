@@ -62,8 +62,35 @@ void IntegerValueMenuItem::handleNextAction() {
   ++this->value;
 }
 
+bool IntegerValueMenuItem::handleEditAction() {
+  return true;
+}
+
 void IntegerValueMenuItem::renderDispatch(MenuRenderer &renderer, bool isSelected) {
   renderer.renderItem(*this, isSelected);
+}
+
+ActionMenuItem::ActionMenuItem(String name, Command<ActionMenuItem> *command) {
+  this->name = name;
+  this->command = command;
+}
+
+String ActionMenuItem::getName() const {
+  return name;
+}
+
+void ActionMenuItem::renderDispatch(MenuRenderer &renderer, bool isSelected) {
+  renderer.renderItem(*this, isSelected);
+}
+
+void ActionMenuItem::handleNextAction() {
+}
+
+bool ActionMenuItem::handleEditAction() {
+  if (command != NULL) {
+    command->run(*this);
+  }
+  return false;
 }
 
 Menu::Menu(MenuRenderer & renderer, MenuActionsProvider & actionsProvider) : renderer(renderer), actionsProvider(actionsProvider) {
@@ -128,7 +155,12 @@ void Menu::handle() {
   bool handledAction = false;
 
   if (this->actionsProvider.isToggleEditModeAction()) {
-    this->isEditMode = !this->isEditMode;
+    if (this->isEditMode){
+      this->isEditMode = false;
+    } else {
+      bool isEditable = this->selectedNode->getItem()->handleEditAction();
+      this->isEditMode = isEditable;
+    }
     handledAction = true;
   } else if (this->actionsProvider.isNextAction()) {
     if (this->isEditMode) {

@@ -22,15 +22,23 @@ void LCDMenuRenderer::renderStart(bool isEditMode) {
 }
 
 void LCDMenuRenderer::renderItem(const IntegerValueMenuItem &item, bool isSelected) {
-    String prefix = " ";
-    if (isSelected) {
-      if (this->isEditMode) {
-        prefix = '#';
-      } else {
-        prefix = ">";
-      }
+    display.println(this->getItemPrefix(isSelected) + item.getName() + " = " + item.getValue());
+}
+
+void LCDMenuRenderer::renderItem(const ActionMenuItem &item, bool isSelected) {
+    display.println(this->getItemPrefix(isSelected) + item.getName());
+}
+
+String LCDMenuRenderer::getItemPrefix(bool isSelected) {
+  String prefix = " ";
+  if (isSelected) {
+    if (this->isEditMode) {
+      prefix = '#';
+    } else {
+      prefix = ">";
     }
-    display.println(prefix + item.getName() + " = " + item.getValue());
+  }
+  return prefix;
 }
 
 void LCDMenuRenderer::renderFinish() {

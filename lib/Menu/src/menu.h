@@ -10,10 +10,13 @@ typedef std::string String;
 
 class MenuNode;
 class IntegerValueMenuItem;
+class ActionMenuItem;
+class MenuItem;
 
 class MenuRenderer {
   public:
     virtual void renderItem(const IntegerValueMenuItem &item, bool isSelected) = 0;
+    virtual void renderItem(const ActionMenuItem &item, bool isSelected) = 0;
     virtual void renderStart(bool isEditMode) = 0;
     virtual void renderFinish() = 0;
 };
@@ -30,6 +33,7 @@ class MenuItem {
     virtual void renderDispatch(MenuRenderer &renderer, bool isSelected) = 0;
     virtual String getName() const = 0;
     virtual void handleNextAction() = 0;
+    virtual bool handleEditAction() = 0;
     virtual ~MenuItem() {};
 };
 
@@ -41,6 +45,7 @@ class IntegerValueMenuItem : public MenuItem {
     void renderDispatch(MenuRenderer &renderer, bool isSelected);
     String getName() const;
     void handleNextAction();
+    bool handleEditAction();
     int getValue() const;
     void setValue(int value);
   private:
@@ -48,6 +53,23 @@ class IntegerValueMenuItem : public MenuItem {
     int value;
 };
 
+template <typename T>
+class Command {
+  public:
+    virtual void run(const T &value) = 0;
+};
+
+class ActionMenuItem: public MenuItem {
+  public:
+    ActionMenuItem(String name, Command<ActionMenuItem> *command);
+    String getName() const;
+    void renderDispatch(MenuRenderer &renderer, bool isSelected);
+    void handleNextAction();
+    bool handleEditAction();
+  private:
+    String name;
+    Command<ActionMenuItem> *command;
+};
 
 class MenuNode {
   public:

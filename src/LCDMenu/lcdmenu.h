@@ -10,9 +10,11 @@ class LCDMenuRenderer: public MenuRenderer {
     LCDMenuRenderer(Adafruit_PCD8544 &display): display(display) {}
     void setup(int lcdLedPin);
     void renderItem(const IntegerValueMenuItem &item, bool isSelected);
+    void renderItem(const ActionMenuItem &item, bool isSelected);
     void renderStart(bool isEditMode);
     void renderFinish();
   private:
+    String getItemPrefix(bool isSelected);
     Adafruit_PCD8544 &display;
     bool isEditMode;
 };
