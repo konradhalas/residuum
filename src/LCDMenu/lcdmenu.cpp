@@ -6,11 +6,11 @@
 
 #include "lcdmenu.h"
 
-void LCDMenuRenderer::setup(int lcdLedPin) {
+void LCDMenuRenderer::setup(int lcdLedPin, int contrast) {
   pinMode(lcdLedPin, OUTPUT);
   analogWrite(lcdLedPin, 255);
   display.begin();
-  display.setContrast(60);
+  display.setContrast(contrast);
 }
 
 void LCDMenuRenderer::renderStart(bool isEditMode) {

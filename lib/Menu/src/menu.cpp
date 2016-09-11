@@ -41,9 +41,10 @@ IntegerValueMenuItem::IntegerValueMenuItem(const IntegerValueMenuItem &item) {
     this->value = item.value;
 }
 
-IntegerValueMenuItem::IntegerValueMenuItem(String name, int value) {
+IntegerValueMenuItem::IntegerValueMenuItem(String name, int value, Command<IntegerValueMenuItem> *onValueChangeCommand) {
   this->name = name;
   this->value = value;
+  this->onValueChangeCommand = onValueChangeCommand;
 }
 
 String IntegerValueMenuItem::getName() const {
@@ -60,6 +61,9 @@ void IntegerValueMenuItem::setValue(int value) {
 
 void IntegerValueMenuItem::handleNextAction() {
   ++this->value;
+  if (this->onValueChangeCommand != NULL) {
+    this->onValueChangeCommand->run(*this);
+  }
 }
 
 bool IntegerValueMenuItem::handleEditAction() {

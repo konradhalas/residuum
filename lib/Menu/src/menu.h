@@ -38,9 +38,15 @@ class MenuItem {
     virtual ~MenuItem() {};
 };
 
+template <typename T>
+class Command {
+  public:
+    virtual void run(const T &value) = 0;
+};
+
 class IntegerValueMenuItem : public MenuItem {
   public:
-    IntegerValueMenuItem(String name, int value);
+    IntegerValueMenuItem(String name, int value, Command<IntegerValueMenuItem> *onValueChangeCommand = NULL);
     IntegerValueMenuItem(const IntegerValueMenuItem &item);
     ~IntegerValueMenuItem() {};
     void renderDispatch(MenuRenderer &renderer, bool isSelected);
@@ -52,12 +58,7 @@ class IntegerValueMenuItem : public MenuItem {
   private:
     String name;
     int value;
-};
-
-template <typename T>
-class Command {
-  public:
-    virtual void run(const T &value) = 0;
+    Command<IntegerValueMenuItem> *onValueChangeCommand;
 };
 
 class ActionMenuItem: public MenuItem {

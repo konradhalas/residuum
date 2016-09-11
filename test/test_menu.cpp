@@ -47,10 +47,11 @@ class TestMenuActionsProvider: public MenuActionsProvider {
     bool nextAction;
 };
 
-class TestCommand: public Command<ActionMenuItem> {
+template <typename T>
+class TestCommand: public Command<T> {
   public:
     TestCommand(): isAfterRun(false) {};
-    void run(const ActionMenuItem &item) {
+    void run(const T &item) {
       isAfterRun = true;
     }
     bool isAfterRun;
@@ -164,12 +165,22 @@ void test_handle_toggle_edit_mode_action_with_non_editable_item() {
   TestMenuRenderer renderer = TestMenuRenderer();
   TestMenuActionsProvider actionsProvider = TestMenuActionsProvider(true, false);
   Menu menu = Menu(renderer, actionsProvider);
-  TestCommand *command = new TestCommand();
+  TestCommand<ActionMenuItem> *command = new TestCommand<ActionMenuItem>();
   menu.addItem(new ActionMenuItem("item", command));
 
   menu.handle();
 
   TEST_ASSERT_FALSE(renderer.isEditMode);
+  TEST_ASSERT_TRUE(command->isAfterRun);
+}
+
+void test_integer_value_menu_item_handle_next_action() {
+  TestCommand<IntegerValueMenuItem> *command = new TestCommand<IntegerValueMenuItem>();
+  IntegerValueMenuItem item = IntegerValueMenuItem("item", 1, command);
+
+  item.handleNextAction();
+
+  TEST_ASSERT_EQUAL(2, item.getValue());
   TEST_ASSERT_TRUE(command->isAfterRun);
 }
 
@@ -184,6 +195,7 @@ int main(int argc, char const *argv[]) {
   RUN_TEST(test_handle_toggle_edit_mode_action_with_editable_item);
   RUN_TEST(test_handle_toggle_edit_mode_action_with_non_editable_item);
   RUN_TEST(test_handle_next_action_when_edit_mode);
+  RUN_TEST(test_integer_value_menu_item_handle_next_action);
   UNITY_END();
   return 0;
 }
