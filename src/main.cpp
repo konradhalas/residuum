@@ -20,7 +20,7 @@ class ChangeContrastCommand: public Command<IntegerValueMenuItem> {
   public:
     ChangeContrastCommand(Adafruit_PCD8544 &display): display(display) {
     }
-    void run(const IntegerValueMenuItem &item) {
+    void run(IntegerValueMenuItem &item) {
         display.setContrast(item.getValue());
     }
   private:
@@ -29,7 +29,7 @@ class ChangeContrastCommand: public Command<IntegerValueMenuItem> {
 
 class ToggleBacklightCommand: public Command<BoolValueMenuItem> {
   public:
-    void run(const BoolValueMenuItem &item) {
+    void run(BoolValueMenuItem &item) {
         analogWrite(LCD_LED_PIN, item.getValue() ? 255 : 0);
     }
 };

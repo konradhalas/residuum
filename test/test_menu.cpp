@@ -54,10 +54,20 @@ template <typename T>
 class TestCommand: public Command<T> {
   public:
     TestCommand(): isAfterRun(false) {};
-    void run(const T &item) {
+    void run(T &item) {
       isAfterRun = true;
     }
     bool isAfterRun;
+};
+
+template <typename T, typename V>
+class TestUpdateCommand: public Command<T> {
+  public:
+    TestUpdateCommand(V value): value(value) {};
+    void run(T &item) {
+      item.setValue(this->value);
+    }
+    V value;
 };
 
 void test_add_single_item() {
@@ -197,6 +207,19 @@ void test_bool_value_menu_item_handle_next_action() {
   TEST_ASSERT_TRUE(command->isAfterRun);
 }
 
+void test_handle_value_menu_item_auto_update() {
+  TestMenuRenderer renderer = TestMenuRenderer();
+  TestMenuActionsProvider actionsProvider = TestMenuActionsProvider(false, false);
+  Menu menu = Menu(renderer, actionsProvider);
+  TestUpdateCommand<IntegerValueMenuItem, int> *command = new TestUpdateCommand<IntegerValueMenuItem, int>(2);
+  IntegerValueMenuItem *item = new IntegerValueMenuItem("item", 1, NULL, command);
+  menu.addItem(item);
+
+  menu.handle();
+
+  TEST_ASSERT_EQUAL(2, item->getValue());
+}
+
 int main(int argc, char const *argv[]) {
   UNITY_BEGIN();
   RUN_TEST(test_add_single_item);
@@ -210,6 +233,7 @@ int main(int argc, char const *argv[]) {
   RUN_TEST(test_handle_next_action_when_edit_mode);
   RUN_TEST(test_integer_value_menu_item_handle_next_action);
   RUN_TEST(test_bool_value_menu_item_handle_next_action);
+  RUN_TEST(test_handle_value_menu_item_auto_update);
   UNITY_END();
   return 0;
 }

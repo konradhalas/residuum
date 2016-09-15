@@ -37,6 +37,7 @@ class MenuItem {
     virtual void renderDispatch(MenuRenderer &renderer, bool isSelected) = 0;
     virtual void handleNextAction() = 0;
     virtual bool handleEditAction() = 0;
+    virtual bool handleTick() { return false; }
     virtual ~MenuItem() {};
     String getName() const { return this->name; }
   private:
@@ -46,7 +47,7 @@ class MenuItem {
 template <typename T>
 class Command {
   public:
-    virtual void run(const T &value) = 0;
+    virtual void run(T &value) = 0;
 };
 
 template <typename T>
@@ -62,12 +63,14 @@ class ValueMenuItem: public MenuItem {
 
 class IntegerValueMenuItem: public ValueMenuItem<int> {
   public:
-    IntegerValueMenuItem(String name, int value, Command<IntegerValueMenuItem> *onValueChangeCommand = NULL);
+    IntegerValueMenuItem(String name, int value, Command<IntegerValueMenuItem> *onValueChangeCommand = NULL, Command<IntegerValueMenuItem> *valueUpdateCommand = NULL);
     ~IntegerValueMenuItem() {};
     void renderDispatch(MenuRenderer &renderer, bool isSelected);
     void handleNextAction();
+    bool handleTick();
   private:
     Command<IntegerValueMenuItem> *onValueChangeCommand;
+    Command<IntegerValueMenuItem> *valueUpdateCommand;
 };
 
 class BoolValueMenuItem: public ValueMenuItem<bool> {

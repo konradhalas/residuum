@@ -36,8 +36,9 @@ void MenuNode::setPrevious(MenuNode *node) {
   this->previous = node;
 }
 
-IntegerValueMenuItem::IntegerValueMenuItem(String name, int value, Command<IntegerValueMenuItem> *onValueChangeCommand) : ValueMenuItem<int>(name, value) {
+IntegerValueMenuItem::IntegerValueMenuItem(String name, int value, Command<IntegerValueMenuItem> *onValueChangeCommand, Command<IntegerValueMenuItem> *valueUpdateCommand) : ValueMenuItem<int>(name, value) {
   this->onValueChangeCommand = onValueChangeCommand;
+  this->valueUpdateCommand = valueUpdateCommand;
 }
 
 void IntegerValueMenuItem::handleNextAction() {
@@ -45,6 +46,14 @@ void IntegerValueMenuItem::handleNextAction() {
   if (this->onValueChangeCommand != NULL) {
     this->onValueChangeCommand->run(*this);
   }
+}
+
+bool IntegerValueMenuItem::handleTick() {
+  if (this->valueUpdateCommand != NULL) {
+    this->valueUpdateCommand->run(*this);
+    return true;
+  }
+  return false;
 }
 
 void IntegerValueMenuItem::renderDispatch(MenuRenderer &renderer, bool isSelected) {
@@ -173,6 +182,17 @@ int Menu::getItemsCount() const {
 
 void Menu::handle() {
   bool handledAction = false;
+
+  if (root != NULL) {
+    MenuNode *current = root;
+    do {
+      bool handled = current->getItem()->handleTick();
+      if (handled) {
+        handledAction = true;
+      }
+      current = current->getNext();
+    } while(current != root);
+  }
 
   if (this->actionsProvider.isToggleEditModeAction()) {
     if (this->isEditMode){
