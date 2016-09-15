@@ -50,37 +50,50 @@ class Command {
     virtual void run(T &value) = 0;
 };
 
-template <typename T>
+template <typename T, typename C>
 class ValueMenuItem: public MenuItem {
   public:
-    ValueMenuItem(String name, T value): MenuItem(name) { this->value = value; }
+    ValueMenuItem(String name, T value, C *valueChangedCommand = NULL, C *tickHandleCommand = NULL): MenuItem(name), value(value), valueChangedCommand(valueChangedCommand), tickHandleCommand(tickHandleCommand) {}
     T getValue() const { return value; };
     void setValue(T value) { this->value = value; };
     bool handleEditAction() { return true; };
+    void handleNextAction() {
+      this->updateValueOnNextAction();
+      if (this->valueChangedCommand != NULL) {
+        this->dispatchCommandRun(this->valueChangedCommand);
+      }
+    };
+    bool handleTick() {
+      if (this->tickHandleCommand != NULL) {
+        this->dispatchCommandRun(this->tickHandleCommand);
+        return true;
+      }
+      return false;
+    };
+    virtual void updateValueOnNextAction() = 0;
+    virtual void dispatchCommandRun(C *command) = 0;
   private:
     T value;
+    C *valueChangedCommand;
+    C *tickHandleCommand;
 };
 
-class IntegerValueMenuItem: public ValueMenuItem<int> {
+class IntegerValueMenuItem: public ValueMenuItem<int, Command<IntegerValueMenuItem> > {
   public:
-    IntegerValueMenuItem(String name, int value, Command<IntegerValueMenuItem> *onValueChangeCommand = NULL, Command<IntegerValueMenuItem> *valueUpdateCommand = NULL);
+    IntegerValueMenuItem(String name, int value, Command<IntegerValueMenuItem> *valueChangedCommand = NULL, Command<IntegerValueMenuItem> *tickHandleCommand = NULL);
     ~IntegerValueMenuItem() {};
     void renderDispatch(MenuRenderer &renderer, bool isSelected);
-    void handleNextAction();
-    bool handleTick();
-  private:
-    Command<IntegerValueMenuItem> *onValueChangeCommand;
-    Command<IntegerValueMenuItem> *valueUpdateCommand;
+    void updateValueOnNextAction();
+    void dispatchCommandRun(Command<IntegerValueMenuItem> *command);
 };
 
-class BoolValueMenuItem: public ValueMenuItem<bool> {
+class BoolValueMenuItem: public ValueMenuItem<bool, Command<BoolValueMenuItem> > {
   public:
-    BoolValueMenuItem(String name, bool value, Command<BoolValueMenuItem> *onValueChangeCommand = NULL);
+    BoolValueMenuItem(String name, bool value, Command<BoolValueMenuItem> *valueChangedCommand = NULL, Command<BoolValueMenuItem> *tickHandleCommand = NULL);
     ~BoolValueMenuItem() {};
     void renderDispatch(MenuRenderer &renderer, bool isSelected);
-    void handleNextAction();
-  private:
-    Command<BoolValueMenuItem> *onValueChangeCommand;
+    void updateValueOnNextAction();
+    void dispatchCommandRun(Command<BoolValueMenuItem> *command);
 };
 
 class ActionMenuItem: public MenuItem {
