@@ -16,24 +16,6 @@
 
 #define BUTTONS_DELAY 500
 
-class ChangeContrastCommand: public Command<IntegerValueMenuItem> {
-  public:
-    ChangeContrastCommand(Adafruit_PCD8544 &display): display(display) {
-    }
-    void run(IntegerValueMenuItem &item) {
-        display.setContrast(item.getValue());
-    }
-  private:
-    Adafruit_PCD8544 &display;
-};
-
-class ToggleBacklightCommand: public Command<BoolValueMenuItem> {
-  public:
-    void run(BoolValueMenuItem &item) {
-        analogWrite(LCD_LED_PIN, item.getValue() ? 255 : 0);
-    }
-};
-
 Adafruit_PCD8544 display = Adafruit_PCD8544(LCD_DC_PIN, LCD_CS_PIN, LCD_RST_PIN);
 LCDMenuRenderer renderer = LCDMenuRenderer(display);
 ArduinoMenuActionsProvider actionsProvider = ArduinoMenuActionsProvider(FIRST_BUTTON_PIN, SECOND_BUTTON_PIN, BUTTONS_DELAY);
@@ -47,7 +29,7 @@ void setup()   {
   renderer.setup(LCD_LED_PIN, defaultContrast);
 
   menu.addItem(new IntegerValueMenuItem("CONTR", defaultContrast, new ChangeContrastCommand(display)));
-  menu.addItem(new BoolValueMenuItem("BCKLI", true, new ToggleBacklightCommand()));
+  menu.addItem(new BoolValueMenuItem("BCKLI", true, new ToggleBacklightCommand(LCD_LED_PIN)));
   menu.addItem(new ActionMenuItem("START", NULL));
   menu.render();
 }
