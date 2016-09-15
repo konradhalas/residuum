@@ -6,7 +6,7 @@
 
 #include "lcdmenu.h"
 
-void LCDMenuRenderer::setup(int lcdLedPin, int contrast) {
+LCDMenuRenderer::LCDMenuRenderer(Adafruit_PCD8544 &display, int lcdLedPin, int contrast): display(display) {
   pinMode(lcdLedPin, OUTPUT);
   analogWrite(lcdLedPin, 255);
   display.begin();

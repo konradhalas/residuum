@@ -7,8 +7,7 @@
 
 class LCDMenuRenderer: public MenuRenderer {
   public:
-    LCDMenuRenderer(Adafruit_PCD8544 &display): display(display) {}
-    void setup(int lcdLedPin, int contrast);
+    LCDMenuRenderer(Adafruit_PCD8544 &display, int lcdLedPin, int contrast);
     void renderItem(const IntegerValueMenuItem &item, bool isSelected);
     void renderItem(const BoolValueMenuItem &item, bool isSelected);
     void renderItem(const ActionMenuItem &item, bool isSelected);
