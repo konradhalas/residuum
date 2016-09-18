@@ -180,7 +180,7 @@ void Menu::handle() {
         handledAction = true;
       }
       current = current->getNext();
-    } while(current != root);
+    } while (current != root);
   }
 
   if (this->actionsProvider.isToggleEditModeAction()) {
