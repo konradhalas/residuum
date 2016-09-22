@@ -35,25 +35,4 @@ class ArduinoMenuActionsProvider: public MenuActionsProvider {
     int buttonsDealy;
 };
 
-class ChangeContrastCommand: public Command<IntegerValueMenuItem> {
-  public:
-    ChangeContrastCommand(Adafruit_PCD8544 &display): display(display) {
-    }
-    void run(IntegerValueMenuItem &item) {
-        display.setContrast(item.getValue());
-    }
-  private:
-    Adafruit_PCD8544 &display;
-};
-
-class ToggleBacklightCommand: public Command<BoolValueMenuItem> {
-  public:
-    ToggleBacklightCommand(int pin): pin(pin) {}
-    void run(BoolValueMenuItem &item) {
-        analogWrite(this->pin, item.getValue() ? 255 : 0);
-    }
-  private:
-    int pin;
-};
-
 #endif
