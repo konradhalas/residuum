@@ -28,6 +28,7 @@ class MenuActionsProvider {
   public:
     virtual bool isToggleEditModeAction() = 0;
     virtual bool isNextAction() = 0;
+    virtual bool isPreviousAction() = 0;
     virtual void afterActionHandler() = 0;
 };
 
@@ -36,6 +37,7 @@ class MenuItem {
     MenuItem(String name) : name(name) {};
     virtual void renderDispatch(MenuRenderer &renderer, bool isSelected) = 0;
     virtual void handleNextAction() = 0;
+    virtual void handlePreviousAction() = 0;
     virtual bool handleEditAction() = 0;
     virtual bool handleTick() { return false; }
     virtual ~MenuItem() {};
@@ -63,6 +65,12 @@ class ValueMenuItem: public MenuItem {
         this->dispatchCommandRun(this->valueChangedCommand);
       }
     };
+    void handlePreviousAction() {
+      this->updateValueOnPreviousAction();
+      if (this->valueChangedCommand != NULL) {
+        this->dispatchCommandRun(this->valueChangedCommand);
+      }
+    };
     bool handleTick() {
       if (this->tickHandleCommand != NULL) {
         this->dispatchCommandRun(this->tickHandleCommand);
@@ -71,6 +79,7 @@ class ValueMenuItem: public MenuItem {
       return false;
     };
     virtual void updateValueOnNextAction() = 0;
+    virtual void updateValueOnPreviousAction() = 0;
     virtual void dispatchCommandRun(C *command) = 0;
   private:
     T value;
@@ -84,6 +93,7 @@ class IntegerValueMenuItem: public ValueMenuItem<int, Command<IntegerValueMenuIt
     ~IntegerValueMenuItem() {};
     void renderDispatch(MenuRenderer &renderer, bool isSelected);
     void updateValueOnNextAction();
+    void updateValueOnPreviousAction();
     void dispatchCommandRun(Command<IntegerValueMenuItem> *command);
 };
 
@@ -93,6 +103,7 @@ class BoolValueMenuItem: public ValueMenuItem<bool, Command<BoolValueMenuItem> >
     ~BoolValueMenuItem() {};
     void renderDispatch(MenuRenderer &renderer, bool isSelected);
     void updateValueOnNextAction();
+    void updateValueOnPreviousAction();
     void dispatchCommandRun(Command<BoolValueMenuItem> *command);
 };
 
@@ -101,6 +112,7 @@ class ActionMenuItem: public MenuItem {
     ActionMenuItem(String name, Command<ActionMenuItem> *command);
     void renderDispatch(MenuRenderer &renderer, bool isSelected);
     void handleNextAction();
+    void handlePreviousAction();
     bool handleEditAction();
   private:
     Command<ActionMenuItem> *command;

@@ -52,20 +52,25 @@ void LCDMenuRenderer::renderFinish() {
   display.display();
 }
 
-ArduinoMenuActionsProvider::ArduinoMenuActionsProvider(int firstButton, int secondButton, int buttonsDealy) {
-  this->firstButton = firstButton;
-  this->secondButton = secondButton;
+ArduinoMenuActionsProvider::ArduinoMenuActionsProvider(int nextButton, int editButton, int previousButton, int buttonsDealy) {
+  this->nextButton = nextButton;
+  this->editButton = editButton;
+  this->previousButton = previousButton;
   this->buttonsDealy = buttonsDealy;
-  pinMode(firstButton, INPUT);
-  pinMode(secondButton, INPUT);
+  pinMode(nextButton, INPUT);
+  pinMode(editButton, INPUT);
 }
 
 bool ArduinoMenuActionsProvider::isToggleEditModeAction() {
-  return digitalRead(this->secondButton) == HIGH;
+  return digitalRead(this->editButton) == HIGH;
 };
 
 bool ArduinoMenuActionsProvider::isNextAction() {
-  return digitalRead(this->firstButton) == HIGH;
+  return digitalRead(this->nextButton) == HIGH;
+};
+
+bool ArduinoMenuActionsProvider::isPreviousAction() {
+  return digitalRead(this->previousButton) == HIGH;
 };
 
 void ArduinoMenuActionsProvider::afterActionHandler() {

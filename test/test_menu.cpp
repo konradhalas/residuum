@@ -34,9 +34,10 @@ class TestMenuRenderer: public MenuRenderer {
 
 class TestMenuActionsProvider: public MenuActionsProvider {
   public:
-    TestMenuActionsProvider(bool toggleEditModeAction = false, bool nextAction = false) {
+    TestMenuActionsProvider(bool toggleEditModeAction = false, bool nextAction = false, bool previousAction = false) {
       this->toggleEditModeAction = toggleEditModeAction;
       this->nextAction = nextAction;
+      this->previousAction = previousAction;
     }
     bool isToggleEditModeAction() {
       return toggleEditModeAction;
@@ -44,10 +45,14 @@ class TestMenuActionsProvider: public MenuActionsProvider {
     bool isNextAction() {
       return nextAction;
     };
+    bool isPreviousAction() {
+      return previousAction;
+    };
     void afterActionHandler() {
     };
     bool toggleEditModeAction;
     bool nextAction;
+    bool previousAction;
 };
 
 template <typename T>

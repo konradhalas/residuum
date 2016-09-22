@@ -23,13 +23,15 @@ class LCDMenuRenderer: public MenuRenderer {
 
 class ArduinoMenuActionsProvider: public MenuActionsProvider {
   public:
-    ArduinoMenuActionsProvider(int firstButton, int secondButton, int buttonsDealy);
+    ArduinoMenuActionsProvider(int nextButton, int editButton, int previousButton, int buttonsDealy);
     bool isToggleEditModeAction();
     bool isNextAction();
+    bool isPreviousAction();
     void afterActionHandler();
   private:
-    int firstButton;
-    int secondButton;
+    int nextButton;
+    int editButton;
+    int previousButton;
     int buttonsDealy;
 };
 

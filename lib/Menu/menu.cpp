@@ -42,6 +42,10 @@ void IntegerValueMenuItem::updateValueOnNextAction() {
   this->setValue(this->getValue() + 1);
 }
 
+void IntegerValueMenuItem::updateValueOnPreviousAction() {
+  this->setValue(this->getValue() - 1);
+}
+
 void IntegerValueMenuItem::renderDispatch(MenuRenderer &renderer, bool isSelected) {
   renderer.renderItem(*this, isSelected);
 }
@@ -53,6 +57,10 @@ void IntegerValueMenuItem::dispatchCommandRun(Command<IntegerValueMenuItem> *com
 BoolValueMenuItem::BoolValueMenuItem(String name, bool value, Command<BoolValueMenuItem> *onValueChangeCommand, Command<BoolValueMenuItem> *valueUpdateCommand) : ValueMenuItem<bool, Command<BoolValueMenuItem> >(name, value, onValueChangeCommand, valueUpdateCommand) {}
 
 void BoolValueMenuItem::updateValueOnNextAction() {
+  this->setValue(!this->getValue());
+}
+
+void BoolValueMenuItem::updateValueOnPreviousAction() {
   this->setValue(!this->getValue());
 }
 
@@ -73,6 +81,9 @@ void ActionMenuItem::renderDispatch(MenuRenderer &renderer, bool isSelected) {
 }
 
 void ActionMenuItem::handleNextAction() {
+}
+
+void ActionMenuItem::handlePreviousAction() {
 }
 
 bool ActionMenuItem::handleEditAction() {
@@ -196,6 +207,13 @@ void Menu::handle() {
       this->selectedNode->getItem()->handleNextAction();
     } else {
       this->selectedNode = this->selectedNode->getNext();
+    }
+    handledAction = true;
+  } else if (this->actionsProvider.isPreviousAction()) {
+    if (this->isEditMode) {
+      this->selectedNode->getItem()->handlePreviousAction();
+    } else {
+      this->selectedNode = this->selectedNode->getPrevious();
     }
     handledAction = true;
   }
