@@ -4,6 +4,8 @@
 #include <Adafruit_GFX.h>
 #include <Adafruit_PCD8544.h>
 #include <QTRSensors.h>
+
+#include "consts.h"
 #include "menu.h"
 
 class ChangeContrastCommand: public Command<IntegerValueMenuItem> {
@@ -31,7 +33,7 @@ class ReadReflectanceSensorCommand: public Command<IntegerValueMenuItem> {
   public:
     ReadReflectanceSensorCommand(QTRSensorsRC &qtr, int sensorNumber): qtr(qtr), sensorNumber(sensorNumber) {}
     void run(IntegerValueMenuItem &item) {
-      unsigned int sensorValues[8];
+      unsigned int sensorValues[NUMBER_OF_REFLECTANT_SENSORS];
       this->qtr.read(sensorValues);
       item.setValue(sensorValues[this->sensorNumber - 1]);
     }
@@ -56,7 +58,7 @@ class ReadLineCommand: public Command<IntegerValueMenuItem> {
   public:
     ReadLineCommand(QTRSensorsRC &qtr): qtr(qtr) {}
     void run(IntegerValueMenuItem &item) {
-      unsigned int sensorValues[8];
+      unsigned int sensorValues[NUMBER_OF_REFLECTANT_SENSORS];
       item.setValue(sensorValues[this->qtr.readLine(sensorValues)]);
     }
   private:
