@@ -59,7 +59,7 @@ class ReadLineCommand: public Command<IntegerValueMenuItem> {
     ReadLineCommand(QTRSensorsRC &qtr): qtr(qtr) {}
     void run(IntegerValueMenuItem &item) {
       unsigned int sensorValues[NUMBER_OF_REFLECTANT_SENSORS];
-      item.setValue(sensorValues[this->qtr.readLine(sensorValues)]);
+      item.setValue(this->qtr.readLine(sensorValues));
     }
   private:
     QTRSensorsRC &qtr;
