@@ -52,4 +52,15 @@ class CalibrateCommand: public Command<ActionMenuItem> {
     QTRSensorsRC &qtr;
 };
 
+class ReadLineCommand: public Command<IntegerValueMenuItem> {
+  public:
+    ReadLineCommand(QTRSensorsRC &qtr): qtr(qtr) {}
+    void run(IntegerValueMenuItem &item) {
+      unsigned int sensorValues[8];
+      item.setValue(sensorValues[this->qtr.readLine(sensorValues)]);
+    }
+  private:
+    QTRSensorsRC &qtr;
+};
+
 #endif

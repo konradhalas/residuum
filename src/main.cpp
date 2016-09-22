@@ -47,6 +47,7 @@ void setup()   {
 
   menu.addItem(new IntegerValueMenuItem("CONTR", LCD_CONTRAST, new ChangeContrastCommand(display)));
   menu.addItem(new BoolValueMenuItem("BCKLI", true, new ToggleBacklightCommand(LCD_LED_PIN)));
+  menu.addItem(new IntegerValueMenuItem("LINE", 0, NULL, new ReadLineCommand(qtr)));
   for (int i = 1; i <= NUMBER_OF_REFLECTANT_SENSORS; i++) {
     menu.addItem(new IntegerValueMenuItem("RS" + String(i), 0, NULL, new ReadReflectanceSensorCommand(qtr, i)));
   }
