@@ -154,9 +154,9 @@ void test_handle_next_action_when_edit_mode() {
   TestMenuRenderer renderer = TestMenuRenderer();
   TestMenuActionsProvider actionsProvider = TestMenuActionsProvider(true, false);
   Menu menu = Menu(renderer, actionsProvider);
-  IntegerValueMenuItem *item = new IntegerValueMenuItem("item1", 1);
+  IntegerValueMenuItem *item = new IntegerValueMenuItem("item1", 1, new TestCommand<IntegerValueMenuItem>());
   menu.addItem(item);
-  menu.addItem(new IntegerValueMenuItem("item2", 1));
+  menu.addItem(new IntegerValueMenuItem("item2", 1, new TestCommand<IntegerValueMenuItem>()));
 
   menu.handle();
   actionsProvider.toggleEditModeAction = false;
@@ -171,7 +171,7 @@ void test_handle_toggle_edit_mode_action_with_editable_item() {
   TestMenuRenderer renderer = TestMenuRenderer();
   TestMenuActionsProvider actionsProvider = TestMenuActionsProvider(true, false);
   Menu menu = Menu(renderer, actionsProvider);
-  menu.addItem(new IntegerValueMenuItem("item", 1));
+  menu.addItem(new IntegerValueMenuItem("item", 1, new TestCommand<IntegerValueMenuItem>()));
 
   menu.handle();
 

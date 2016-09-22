@@ -58,7 +58,7 @@ class ValueMenuItem: public MenuItem {
     ValueMenuItem(String name, T value, C *valueChangedCommand = NULL, C *tickHandleCommand = NULL): MenuItem(name), value(value), valueChangedCommand(valueChangedCommand), tickHandleCommand(tickHandleCommand) {}
     T getValue() const { return value; };
     void setValue(T value) { this->value = value; };
-    bool handleEditAction() { return true; };
+    bool handleEditAction() { return this->valueChangedCommand != NULL; };
     void handleNextAction() {
       this->updateValueOnNextAction();
       if (this->valueChangedCommand != NULL) {
