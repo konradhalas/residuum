@@ -93,10 +93,11 @@ bool ActionMenuItem::handleEditAction() {
   return false;
 }
 
-Menu::Menu(MenuRenderer & renderer, MenuActionsProvider & actionsProvider) : renderer(renderer), actionsProvider(actionsProvider) {
+Menu::Menu(MenuRenderer & renderer, MenuActionsProvider & actionsProvider, int handleTickFrequency) : renderer(renderer), actionsProvider(actionsProvider), handleTickFrequency(handleTickFrequency) {
   this->selectedNode = NULL;
   this->root = NULL;
   this->isEditMode = false;
+  this->tickNumber = 0;
 }
 
 void Menu::addItem(MenuItem *item) {
@@ -183,16 +184,19 @@ int Menu::getItemsCount() const {
 void Menu::handle() {
   bool handledAction = false;
 
-  if (root != NULL) {
-    MenuNode *current = root;
-    do {
-      bool handled = current->getItem()->handleTick();
-      if (handled) {
-        handledAction = true;
-      }
-      current = current->getNext();
-    } while (current != root);
+  if (this->tickNumber % this->handleTickFrequency == 0) {
+    if (root != NULL) {
+      MenuNode *current = root;
+      do {
+        bool handled = current->getItem()->handleTick();
+        if (handled) {
+          handledAction = true;
+        }
+        current = current->getNext();
+      } while (current != root);
+    }
   }
+  ++this->tickNumber;
 
   if (this->actionsProvider.isToggleEditModeAction()) {
     if (this->isEditMode){

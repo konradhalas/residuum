@@ -135,7 +135,7 @@ class MenuNode {
 
 class Menu {
   public:
-    Menu(MenuRenderer &renderer, MenuActionsProvider &actionsProvider);
+    Menu(MenuRenderer &renderer, MenuActionsProvider &actionsProvider, int handleTickFrequency=1);
     void addItem(MenuItem *item);
     void render();
     void handle();
@@ -149,6 +149,8 @@ class Menu {
     MenuRenderer &renderer;
     MenuActionsProvider &actionsProvider;
     bool isEditMode;
+    int tickNumber;
+    int handleTickFrequency;
 };
 
 #endif

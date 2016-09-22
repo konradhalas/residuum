@@ -31,11 +31,12 @@
 #define BUTTONS_DELAY 500
 #define LCD_CONTRAST 55
 #define NUMBER_OF_REFLECTANT_SENSORS 8
+#define HANDLE_TICK_FREQUENCY 20000
 
 Adafruit_PCD8544 display = Adafruit_PCD8544(LCD_DC_PIN, LCD_CS_PIN, LCD_RST_PIN);
 LCDMenuRenderer renderer = LCDMenuRenderer(display);
 ArduinoMenuActionsProvider actionsProvider = ArduinoMenuActionsProvider(NEXT_BUTTON_PIN, EDIT_BUTTON_PIN, PREVIOUS_BUTTON_PIN, BUTTONS_DELAY);
-Menu menu = Menu(renderer, actionsProvider);
+Menu menu = Menu(renderer, actionsProvider, HANDLE_TICK_FREQUENCY);
 
 QTRSensorsRC qtr = QTRSensorsRC((unsigned char[]) {RS_1_PIN, RS_2_PIN, RS_3_PIN, RS_4_PIN, RS_5_PIN, RS_6_PIN, RS_7_PIN,RS_8_PIN}, NUMBER_OF_REFLECTANT_SENSORS);
 
