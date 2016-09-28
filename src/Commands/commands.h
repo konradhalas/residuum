@@ -65,4 +65,21 @@ class ReadLineCommand: public Command<IntegerValueMenuItem> {
     QTRSensorsRC &qtr;
 };
 
+class MotorCheckCommand: public Command<ActionMenuItem> {
+  public:
+    MotorCheckCommand(int phasePin, int enablePin, int direction, int speed=100, int time=2000): phasePin(phasePin), enablePin(enablePin), direction(direction), time(time) {}
+    void run(ActionMenuItem &item) {
+      digitalWrite(this->phasePin, this->direction);
+      analogWrite(this->enablePin, this->speed);
+      delay(this->time);
+      analogWrite(this->enablePin, LOW);
+    }
+  private:
+    int phasePin;
+    int enablePin;
+    int direction;
+    int speed;
+    int time;
+};
+
 #endif

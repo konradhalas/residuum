@@ -23,6 +23,22 @@ void setup()   {
 
   renderer.setup(LCD_LED_PIN, LCD_CONTRAST);
 
+  pinMode(MOTOR_LEFT_ENABLE, OUTPUT);
+  pinMode(MOTOR_LEFT_PHASE, OUTPUT);
+
+  digitalWrite(MOTOR_LEFT_ENABLE, LOW);
+  digitalWrite(MOTOR_LEFT_PHASE, LOW);
+
+  pinMode(MOTOR_RIGHT_ENABLE, OUTPUT);
+  pinMode(MOTOR_RIGHT_PHASE, OUTPUT);
+
+  digitalWrite(MOTOR_RIGHT_ENABLE, LOW);
+  digitalWrite(MOTOR_RIGHT_PHASE, LOW);
+
+  menu.addItem(new ActionMenuItem("ML FWD", new MotorCheckCommand(MOTOR_LEFT_PHASE, MOTOR_LEFT_ENABLE, HIGH)));
+  menu.addItem(new ActionMenuItem("ML BCK", new MotorCheckCommand(MOTOR_LEFT_PHASE, MOTOR_LEFT_ENABLE, LOW)));
+  menu.addItem(new ActionMenuItem("MR FWD", new MotorCheckCommand(MOTOR_RIGHT_PHASE, MOTOR_RIGHT_ENABLE, HIGH)));
+  menu.addItem(new ActionMenuItem("MR BCK", new MotorCheckCommand(MOTOR_RIGHT_PHASE, MOTOR_RIGHT_ENABLE, LOW)));
   menu.addItem(new IntegerValueMenuItem("CONTR", LCD_CONTRAST, new ChangeContrastCommand(display)));
   menu.addItem(new BoolValueMenuItem("BCKLI", true, new ToggleBacklightCommand(LCD_LED_PIN)));
   menu.addItem(new IntegerValueMenuItem("LINE", 0, NULL, new ReadLineCommand(qtr)));
