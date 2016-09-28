@@ -7,6 +7,7 @@
 
 #include "consts.h"
 #include "menu.h"
+#include "arduino_follower.h"
 
 class ChangeContrastCommand: public Command<IntegerValueMenuItem> {
   public:
@@ -67,19 +68,24 @@ class ReadLineCommand: public Command<IntegerValueMenuItem> {
 
 class MotorCheckCommand: public Command<ActionMenuItem> {
   public:
-    MotorCheckCommand(int phasePin, int enablePin, int direction, int speed=100, int time=2000): phasePin(phasePin), enablePin(enablePin), direction(direction), time(time) {}
+    MotorCheckCommand(DRV8835MotorsDriver &motorsDriver, int motor, int speed): motorsDriver(motorsDriver), motor(motor), speed(speed) {}
     void run(ActionMenuItem &item) {
-      digitalWrite(this->phasePin, this->direction);
-      analogWrite(this->enablePin, this->speed);
-      delay(this->time);
-      analogWrite(this->enablePin, LOW);
+      if (this->motor == MOTOR_LEFT) {
+        this->motorsDriver.setLeftMotorSpeed(this->speed);
+      } else if (this->motor == MOTOR_RIGHT) {
+        this->motorsDriver.setRightMotorSpeed(this->speed);
+      }
+      delay(2000);
+      if (this->motor == MOTOR_LEFT) {
+        this->motorsDriver.setLeftMotorSpeed(0);
+      } else if (this->motor == MOTOR_RIGHT) {
+        this->motorsDriver.setRightMotorSpeed(0);
+      }
     }
   private:
-    int phasePin;
-    int enablePin;
-    int direction;
+    DRV8835MotorsDriver &motorsDriver;
+    int motor;
     int speed;
-    int time;
 };
 
 #endif
