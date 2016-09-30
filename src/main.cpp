@@ -5,15 +5,16 @@
 #include <Adafruit_PCD8544.h>
 #include <QTRSensors.h>
 
+#include <follower.h>
+
 #include "consts.h"
-#include "Menu/lcdmenu.h"
 #include "Commands/commands.h"
+#include "Menu/pcd8544renderer.h"
+#include "Menu/arduinoactionsprovider.h"
 #include "Follower/drv8835motorsdriver.h"
 
-#include "follower.h"
-
 Adafruit_PCD8544 display = Adafruit_PCD8544(LCD_DC_PIN, LCD_CS_PIN, LCD_RST_PIN);
-LCDMenuRenderer renderer = LCDMenuRenderer(display);
+PCD8544MenuRenderer renderer = PCD8544MenuRenderer(display);
 ArduinoMenuActionsProvider actionsProvider = ArduinoMenuActionsProvider(NEXT_BUTTON_PIN, EDIT_BUTTON_PIN, PREVIOUS_BUTTON_PIN, BUTTONS_DELAY);
 Menu menu = Menu(renderer, actionsProvider, HANDLE_TICK_FREQUENCY);
 

@@ -5,9 +5,9 @@
 
 #include <Adafruit_PCD8544.h>
 
-class LCDMenuRenderer: public MenuRenderer {
+class PCD8544MenuRenderer: public MenuRenderer {
   public:
-    LCDMenuRenderer(Adafruit_PCD8544 &display);
+    PCD8544MenuRenderer(Adafruit_PCD8544 &display);
     void setup(int lcdLedPin, int contrast);
     void renderItem(const IntegerValueMenuItem &item, bool isSelected);
     void renderItem(const BoolValueMenuItem &item, bool isSelected);
@@ -19,20 +19,6 @@ class LCDMenuRenderer: public MenuRenderer {
     String getItemPrefix(bool isSelected);
     Adafruit_PCD8544 &display;
     bool isEditMode;
-};
-
-class ArduinoMenuActionsProvider: public MenuActionsProvider {
-  public:
-    ArduinoMenuActionsProvider(int nextButton, int editButton, int previousButton, int buttonsDealy);
-    bool isToggleEditModeAction();
-    bool isNextAction();
-    bool isPreviousAction();
-    void afterActionHandler();
-  private:
-    int nextButton;
-    int editButton;
-    int previousButton;
-    int buttonsDealy;
 };
 
 #endif
