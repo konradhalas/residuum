@@ -28,7 +28,7 @@ class TestLineDetector: public LineDetector {
     int max;
 };
 
-void test_follow_straight() {
+void test_follow_go_straight() {
   TestMotorsDriver motorsDriver = TestMotorsDriver();
   TestLineDetector lineDetector = TestLineDetector(4000, 8000);
   Follower follower = Follower(lineDetector, motorsDriver);
@@ -38,6 +38,26 @@ void test_follow_straight() {
   TEST_ASSERT_TRUE(motorsDriver.leftMotorSpeed > 0);
   TEST_ASSERT_TRUE(motorsDriver.rightMotorSpeed > 0);
   TEST_ASSERT_EQUAL(motorsDriver.leftMotorSpeed, motorsDriver.rightMotorSpeed);
+}
+
+void test_follow_turn_left() {
+  TestMotorsDriver motorsDriver = TestMotorsDriver();
+  TestLineDetector lineDetector = TestLineDetector(1000, 8000);
+  Follower follower = Follower(lineDetector, motorsDriver);
+
+  follower.follow();
+
+  TEST_ASSERT_TRUE(motorsDriver.leftMotorSpeed < motorsDriver.rightMotorSpeed);
+}
+
+void test_follow_turn_right() {
+  TestMotorsDriver motorsDriver = TestMotorsDriver();
+  TestLineDetector lineDetector = TestLineDetector(8000, 8000);
+  Follower follower = Follower(lineDetector, motorsDriver);
+
+  follower.follow();
+
+  TEST_ASSERT_TRUE(motorsDriver.leftMotorSpeed > motorsDriver.rightMotorSpeed);
 }
 
 #endif

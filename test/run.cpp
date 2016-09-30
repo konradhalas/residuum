@@ -19,7 +19,9 @@ int main(int argc, char const *argv[]) {
   RUN_TEST(test_bool_value_menu_item_handle_next_action);
   RUN_TEST(test_handle_value_menu_item_auto_update);
 
-  RUN_TEST(test_follow_straight);
+  RUN_TEST(test_follow_go_straight);
+  RUN_TEST(test_follow_turn_left);
+  RUN_TEST(test_follow_turn_right);
 
   UNITY_END();
   return 0;

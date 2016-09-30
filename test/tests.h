@@ -15,4 +15,6 @@ void test_handle_value_menu_item_auto_update();
 
 // follower
 
-void test_follow_straight();
+void test_follow_go_straight();
+void test_follow_turn_left();
+void test_follow_turn_right();
