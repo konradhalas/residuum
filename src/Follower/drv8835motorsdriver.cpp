@@ -1,6 +1,8 @@
+#ifndef UNIT_TEST
+
 #include <Arduino.h>
 
-#include "arduino_follower.h"
+#include "drv8835motorsdriver.h"
 
 DRV8835MotorsDriver::DRV8835MotorsDriver(int leftMotorPhasePin, int leftMotorEnablePin, int rightMotorPhasePin, int rightMotorEnablePin): leftMotorPhasePin(leftMotorPhasePin), leftMotorEnablePin(leftMotorEnablePin), rightMotorPhasePin(rightMotorPhasePin), rightMotorEnablePin(rightMotorEnablePin) {
 
@@ -32,3 +34,5 @@ void DRV8835MotorsDriver::setSpeed(int phasePin, int enablePin, int speed) {
   }
   analogWrite(enablePin, speed);
 }
+
+#endif

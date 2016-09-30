@@ -6,9 +6,9 @@
 #include <QTRSensors.h>
 
 #include "consts.h"
-#include "LCDMenu/lcdmenu.h"
+#include "Menu/lcdmenu.h"
 #include "Commands/commands.h"
-#include "arduino_follower.h"
+#include "Follower/drv8835motorsdriver.h"
 
 #include "follower.h"
 

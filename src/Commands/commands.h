@@ -5,9 +5,9 @@
 #include <Adafruit_PCD8544.h>
 #include <QTRSensors.h>
 
+#include "Follower/drv8835motorsdriver.h"
 #include "consts.h"
 #include "menu.h"
-#include "arduino_follower.h"
 
 class ChangeContrastCommand: public Command<IntegerValueMenuItem> {
   public:
