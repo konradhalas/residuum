@@ -3,8 +3,8 @@
 
 class MotorsDriver {
   public:
-    int getLeftMotorBaseSpeed() { return 0; };
-    int getRightMotorBaseSpeed() { return 0; };
+    virtual void setLeftMotorSpeed(int speed) = 0;
+    virtual void setRightMotorSpeed(int speed) = 0;
 };
 
 #endif

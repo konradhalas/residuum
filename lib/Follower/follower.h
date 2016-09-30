@@ -6,8 +6,11 @@
 
 class Follower {
   public:
-    Follower(LineDetector &lineDetector, MotorsDriver &motorsDriver) {}
-    void follow() {};
+    Follower(LineDetector &lineDetector, MotorsDriver &motorsDriver): lineDetector(lineDetector), motorsDriver(motorsDriver) {}
+    void follow();
+  private:
+    LineDetector &lineDetector;
+    MotorsDriver &motorsDriver;
 };
 
 #endif

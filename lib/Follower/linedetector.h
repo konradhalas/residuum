@@ -2,8 +2,9 @@
 #define LINE_DETECTOR_H
 
 class LineDetector {
-  int detectLine();
-  int getMaximumLineDetectionValue();
+  public:
+    virtual int detectLine() = 0;
+    virtual int getLineMax() = 0;
 };
 
 #endif
