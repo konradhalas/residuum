@@ -1,15 +1,9 @@
 #include "follower.h"
 
 void Follower::follow() {
-  // TODO: implement PID
-  if (this->lineDetector.detectLine() < (this->lineDetector.getLineMax() / 2 ) ) {
-    this->motorsDriver.setRightMotorSpeed(40);
-    this->motorsDriver.setLeftMotorSpeed(10);
-  } else if (this->lineDetector.detectLine() > (this->lineDetector.getLineMax() / 2 ) ) {
-    this->motorsDriver.setRightMotorSpeed(10);
-    this->motorsDriver.setLeftMotorSpeed(40);
-  } else {
-    this->motorsDriver.setLeftMotorSpeed(10);
-    this->motorsDriver.setRightMotorSpeed(10);
-  }
+  int error = this->lineDetector.detectLine();
+  int speedDelta = this->kP * error + this->kD * (error - this->lastError);
+  this->lastError = error;
+  this->motorsDriver.setLeftMotorSpeed(this->baseMotorsSpeed + speedDelta);
+  this->motorsDriver.setRightMotorSpeed(this->baseMotorsSpeed - speedDelta);
 }

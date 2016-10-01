@@ -17,20 +17,16 @@ class TestMotorsDriver: public MotorsDriver {
 
 class TestLineDetector: public LineDetector {
   public:
-    TestLineDetector(int line, int max): line(line), max(max) {}
+    TestLineDetector(int line): line(line){}
     int detectLine() {
       return this->line;
     }
-    int getLineMax() {
-      return this->max;
-    }
     int line;
-    int max;
 };
 
 void test_follow_go_straight() {
   TestMotorsDriver motorsDriver = TestMotorsDriver();
-  TestLineDetector lineDetector = TestLineDetector(4000, 8000);
+  TestLineDetector lineDetector = TestLineDetector(0);
   Follower follower = Follower(lineDetector, motorsDriver);
 
   follower.follow();
@@ -42,7 +38,7 @@ void test_follow_go_straight() {
 
 void test_follow_turn_left() {
   TestMotorsDriver motorsDriver = TestMotorsDriver();
-  TestLineDetector lineDetector = TestLineDetector(1000, 8000);
+  TestLineDetector lineDetector = TestLineDetector(-1000);
   Follower follower = Follower(lineDetector, motorsDriver);
 
   follower.follow();
@@ -52,12 +48,27 @@ void test_follow_turn_left() {
 
 void test_follow_turn_right() {
   TestMotorsDriver motorsDriver = TestMotorsDriver();
-  TestLineDetector lineDetector = TestLineDetector(8000, 8000);
+  TestLineDetector lineDetector = TestLineDetector(1000);
   Follower follower = Follower(lineDetector, motorsDriver);
 
   follower.follow();
 
   TEST_ASSERT_TRUE(motorsDriver.leftMotorSpeed > motorsDriver.rightMotorSpeed);
+}
+
+void test_follow_turn_faster() {
+  TestMotorsDriver firstMotorsDriver = TestMotorsDriver();
+  TestLineDetector firstLineDetector = TestLineDetector(-1000);
+  Follower firstFollower = Follower(firstLineDetector, firstMotorsDriver);
+  TestMotorsDriver secondMotorsDriver = TestMotorsDriver();
+  TestLineDetector secondLineDetector = TestLineDetector(1000);
+  Follower secondFollower = Follower(secondLineDetector, secondMotorsDriver);
+
+  firstFollower.follow();
+  secondFollower.follow();
+
+  TEST_ASSERT_TRUE(firstMotorsDriver.rightMotorSpeed > secondMotorsDriver.rightMotorSpeed);
+  TEST_ASSERT_TRUE(firstMotorsDriver.leftMotorSpeed < secondMotorsDriver.leftMotorSpeed);
 }
 
 #endif
