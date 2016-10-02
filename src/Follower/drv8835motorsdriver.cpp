@@ -4,7 +4,7 @@
 
 #include "drv8835motorsdriver.h"
 
-DRV8835MotorsDriver::DRV8835MotorsDriver(int leftMotorPhasePin, int leftMotorEnablePin, int rightMotorPhasePin, int rightMotorEnablePin): leftMotorPhasePin(leftMotorPhasePin), leftMotorEnablePin(leftMotorEnablePin), rightMotorPhasePin(rightMotorPhasePin), rightMotorEnablePin(rightMotorEnablePin) {
+DRV8835MotorsDriver::DRV8835MotorsDriver(int leftMotorPhasePin, int leftMotorEnablePin, int rightMotorPhasePin, int rightMotorEnablePin, int baseSpeed): leftMotorPhasePin(leftMotorPhasePin), leftMotorEnablePin(leftMotorEnablePin), rightMotorPhasePin(rightMotorPhasePin), rightMotorEnablePin(rightMotorEnablePin), baseSpeed(baseSpeed) {
 
 }
 
@@ -27,10 +27,17 @@ void DRV8835MotorsDriver::setRightMotorSpeed(int speed) {
   this->setSpeed(this->rightMotorPhasePin, this->rightMotorEnablePin, speed);
 }
 
+int DRV8835MotorsDriver::getBaseMotorSpeed() {
+  return this->baseSpeed;
+}
+
 void DRV8835MotorsDriver::setSpeed(int phasePin, int enablePin, int speed) {
   digitalWrite(phasePin, speed > 0 ? HIGH : LOW);
   if (speed < 0) {
     speed = - speed;
+  }
+  if (speed > 255) {
+    speed = 255;
   }
   analogWrite(enablePin, speed);
 }

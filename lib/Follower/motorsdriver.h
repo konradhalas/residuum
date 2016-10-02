@@ -5,6 +5,7 @@ class MotorsDriver {
   public:
     virtual void setLeftMotorSpeed(int speed) = 0;
     virtual void setRightMotorSpeed(int speed) = 0;
+    virtual int getBaseMotorSpeed() = 0;
 };
 
 #endif

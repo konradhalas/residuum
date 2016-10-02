@@ -7,6 +7,7 @@
 #include <QTRSensors.h>
 
 #include "Follower/drv8835motorsdriver.h"
+#include "Follower/qtrlinedetector.h"
 #include "consts.h"
 #include "menu.h"
 
@@ -58,28 +59,29 @@ class CalibrateCommand: public Command<ActionMenuItem> {
 
 class ReadLineCommand: public Command<IntegerValueMenuItem> {
   public:
-    ReadLineCommand(QTRSensorsRC &qtr): qtr(qtr) {}
+    ReadLineCommand(QtrLineDetector &lineDetector): lineDetector(lineDetector) {}
     void run(IntegerValueMenuItem &item) {
-      unsigned int sensorValues[NUMBER_OF_REFLECTANT_SENSORS];
-      item.setValue(this->qtr.readLine(sensorValues));
+      item.setValue(this->lineDetector.detectLine());
     }
   private:
-    QTRSensorsRC &qtr;
+    QtrLineDetector &lineDetector;
 };
 
 class MotorCheckCommand: public Command<ActionMenuItem> {
   public:
     MotorCheckCommand(DRV8835MotorsDriver &motorsDriver, int motor, int speed): motorsDriver(motorsDriver), motor(motor), speed(speed) {}
     void run(ActionMenuItem &item) {
-      if (this->motor == MOTOR_LEFT) {
+      if (this->motor == MOTOR_LEFT || this->motor == MOTOR_BOTH) {
         this->motorsDriver.setLeftMotorSpeed(this->speed);
-      } else if (this->motor == MOTOR_RIGHT) {
+      }
+      if (this->motor == MOTOR_RIGHT || this->motor == MOTOR_BOTH) {
         this->motorsDriver.setRightMotorSpeed(this->speed);
       }
       delay(2000);
-      if (this->motor == MOTOR_LEFT) {
+      if (this->motor == MOTOR_LEFT || this->motor == MOTOR_BOTH) {
         this->motorsDriver.setLeftMotorSpeed(0);
-      } else if (this->motor == MOTOR_RIGHT) {
+      }
+      if (this->motor == MOTOR_RIGHT || this->motor == MOTOR_BOTH) {
         this->motorsDriver.setRightMotorSpeed(0);
       }
     }
@@ -94,9 +96,10 @@ class FollowCommand: public Command<ActionMenuItem> {
     FollowCommand(Follower &follower, int stopButtonPin, unsigned long timeout): follower(follower), stopButtonPin(stopButtonPin), timeout(timeout) {}
     void run(ActionMenuItem &item) {
       unsigned long startTime = millis();
-      while (digitalRead(this->stopButtonPin) == LOW || (millis() - startTime) > timeout) {
+      while (digitalRead(this->stopButtonPin) == HIGH || (millis() - startTime) < timeout) {
         this->follower.follow();
       }
+      this->follower.finish();
     }
   private:
     Follower &follower;

@@ -8,8 +8,11 @@ class TestMotorsDriver: public MotorsDriver {
     void setLeftMotorSpeed(int speed) {
       this->leftMotorSpeed = speed;
     }
-    virtual void setRightMotorSpeed(int speed) {
+    void setRightMotorSpeed(int speed) {
       this->rightMotorSpeed = speed;
+    }
+    int getBaseMotorSpeed() {
+      return 10;
     }
     int leftMotorSpeed;
     int rightMotorSpeed;
