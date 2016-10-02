@@ -48,7 +48,6 @@ void setup()   {
   }
   menu.addItem(new ActionMenuItem("CALIBRATE", new CalibrateCommand(qtr)));
   menu.addItem(new ActionMenuItem("FOLLOW", new FollowCommand(follower, EDIT_BUTTON_PIN, FOLLOW_TIMEOUT)));
-  menu.render();
 }
 
 void loop() {

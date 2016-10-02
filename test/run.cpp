@@ -8,10 +8,12 @@ int main(int argc, char const *argv[]) {
 
   RUN_TEST(test_add_single_item);
   RUN_TEST(test_add_many_item);
-  RUN_TEST(test_render_with_single_item);
-  RUN_TEST(test_render_with_more_items_above_limit);
+  RUN_TEST(test_handle_with_single_item);
+  RUN_TEST(test_handle_with_more_items_above_limit);
   RUN_TEST(test_handle_next_action_with_single_item);
   RUN_TEST(test_handle_next_action_with_many_item);
+  RUN_TEST(test_handle_previous_action_with_single_item);
+  RUN_TEST(test_handle_previous_action_with_many_item);
   RUN_TEST(test_handle_toggle_edit_mode_action_with_editable_item);
   RUN_TEST(test_handle_toggle_edit_mode_action_with_non_editable_item);
   RUN_TEST(test_handle_next_action_when_edit_mode);

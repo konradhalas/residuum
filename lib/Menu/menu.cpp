@@ -36,19 +36,22 @@ void MenuNode::setPrevious(MenuNode *node) {
   this->previous = node;
 }
 
-Menu::Menu(MenuRenderer & renderer, MenuActionsProvider & actionsProvider, int handleTickFrequency) : renderer(renderer), actionsProvider(actionsProvider), handleTickFrequency(handleTickFrequency) {
-  this->selectedNode = NULL;
-  this->root = NULL;
+Menu::Menu(MenuRenderer & renderer, MenuActionsProvider & actionsProvider, int handleTickFrequency) : MenuItemsContainer(), renderer(renderer), actionsProvider(actionsProvider), handleTickFrequency(handleTickFrequency) {
+  this->selectedMenuItem = NULL;
   this->isEditMode = false;
   this->tickNumber = 0;
+  this->rendered = false;
 }
 
-void Menu::addItem(MenuItem *item) {
+MenuItemsContainer::MenuItemsContainer() {
+  this->root = NULL;
+}
+
+void MenuItemsContainer::addItem(MenuItem *item) {
   if (root == NULL) {
     root = new MenuNode(item);
     root->setNext(root);
     root->setPrevious(root);
-    selectedNode = root;
   } else {
     MenuNode *last = root;
     while (last->getNext() != root) {
@@ -64,45 +67,37 @@ void Menu::addItem(MenuItem *item) {
 
 void Menu::render() {
   this->renderer.renderStart(this->isEditMode);
-  MenuNode *current = root;
 
-  int currentItemIndex = -1;
   int selectedItemIndex = this->getSelectedItemIndex();
+  int itemsCount = this->getItemsCount();
 
   int startItemIndex, endItemIndex;
   if (this->renderer.getItemsLimit() == 0) {
     startItemIndex = 0;
-    endItemIndex = this->getItemsCount() - 1;
+    endItemIndex = itemsCount - 1;
   } else {
     startItemIndex = (selectedItemIndex / this->renderer.getItemsLimit()) * this->renderer.getItemsLimit();
     endItemIndex = startItemIndex + this->renderer.getItemsLimit() - 1;
   }
-
-  do {
-    ++currentItemIndex;
-    if (startItemIndex <= currentItemIndex && endItemIndex >= currentItemIndex) {
-      MenuItem *item = current->getItem();
-      item->renderDispatch(this->renderer, current == selectedNode);
-    }
-    current = current->getNext();
-  } while (current != root);
+  for (int i = startItemIndex; i <= endItemIndex && i < itemsCount; i++) {
+    this->getItem(i)->renderDispatch(this->renderer, selectedItemIndex == i);
+  }
   this->renderer.renderFinish();
 }
 
 int Menu::getSelectedItemIndex() const {
-  if (root == NULL) {
+  if (!this->getItemsCount()) {
     return -1;
   }
-  int selectedItemIndex = 0;
-  MenuNode *current = root;
-  while (current != this->selectedNode) {
-    current = current->getNext();
-    ++selectedItemIndex;
+  for (int i = 0; i < this->getItemsCount(); i++) {
+    if (this->getItem(i) == this->selectedMenuItem) {
+      return i;
+    }
   }
-  return selectedItemIndex;
+  // return 0;
 }
 
-MenuItem* Menu::getItem(int i) const {
+MenuItem* MenuItemsContainer::getItem(int i) const {
   int count = 0;
   MenuNode *current = root;
   while (current->getNext() != root && count < i) {
@@ -112,7 +107,7 @@ MenuItem* Menu::getItem(int i) const {
   return current->getItem();
 }
 
-int Menu::getItemsCount() const {
+int MenuItemsContainer::getItemsCount() const {
   int count = 0;
   if (root != NULL) {
     MenuNode *current = root;
@@ -126,17 +121,20 @@ int Menu::getItemsCount() const {
 
 void Menu::handle() {
   bool handledAction = false;
+  int itemsCount = this->getItemsCount();
+
+  if (this->selectedMenuItem == NULL && itemsCount) {
+    this->selectedMenuItem = this->getItem(0);
+  }
 
   if (this->tickNumber % this->handleTickFrequency == 0) {
-    if (root != NULL) {
-      MenuNode *current = root;
-      do {
-        bool handled = current->getItem()->handleTick();
+    if (itemsCount) {
+      for (int i = 0; i < itemsCount; i++) {
+        bool handled = this->getItem(i)->handleTick();
         if (handled) {
           handledAction = true;
         }
-        current = current->getNext();
-      } while (current != root);
+      }
     }
   }
   ++this->tickNumber;
@@ -145,36 +143,41 @@ void Menu::handle() {
     if (this->isEditMode){
       this->isEditMode = false;
     } else {
-      if (this->selectedNode->getItem()->shouldShowProgress()){
-        this->renderer.renderProgress(*this->selectedNode->getItem());
+      if (this->selectedMenuItem->shouldShowProgress()){
+        this->renderer.renderProgress(*selectedMenuItem);
       }
-      bool isEditable = this->selectedNode->getItem()->handleEditAction();
+      bool isEditable = this->selectedMenuItem->handleEditAction();
       this->isEditMode = isEditable;
     }
     handledAction = true;
   } else if (this->actionsProvider.isNextAction()) {
     if (this->isEditMode) {
-      this->selectedNode->getItem()->handleNextAction();
+      this->selectedMenuItem->handleNextAction();
     } else {
-      this->selectedNode = this->selectedNode->getNext();
+      this->selectedMenuItem = this->getItem((this->getSelectedItemIndex() + 1) % this->getItemsCount());
     }
     handledAction = true;
   } else if (this->actionsProvider.isPreviousAction()) {
     if (this->isEditMode) {
-      this->selectedNode->getItem()->handlePreviousAction();
+      this->selectedMenuItem->handlePreviousAction();
     } else {
-      this->selectedNode = this->selectedNode->getPrevious();
+      int previousIndex = (this->getSelectedItemIndex() - 1);
+      if (previousIndex < 0) {
+        previousIndex = this->getItemsCount() - 1;
+      }
+      this->selectedMenuItem = this->getItem(previousIndex);
     }
     handledAction = true;
   }
 
-  if (handledAction) {
+  if (handledAction || !this->rendered) {
     render();
+    this->rendered = true;
     this->actionsProvider.afterActionHandler();
   }
 }
 
-Menu::~Menu() {
+MenuItemsContainer::~MenuItemsContainer() {
   if (root == NULL) {
     return;
   }

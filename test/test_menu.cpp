@@ -106,19 +106,19 @@ void test_add_many_item() {
   TEST_ASSERT_TRUE(menu.getItem(1)->getName() == "item2");
 }
 
-void test_render_with_single_item() {
+void test_handle_with_single_item() {
   TestMenuRenderer renderer = TestMenuRenderer();
   TestMenuActionsProvider actionsProvider = TestMenuActionsProvider();
   Menu menu = Menu(renderer, actionsProvider);
   menu.addItem(new IntegerValueMenuItem("item", 1));
 
-  menu.render();
+  menu.handle();
 
-  TEST_ASSERT_EQUAL(renderer.renderedItemsCount, 1);
-  TEST_ASSERT_EQUAL(renderer.selectedNodeNumber, 0);
+  TEST_ASSERT_EQUAL(1, renderer.renderedItemsCount);
+  TEST_ASSERT_EQUAL(0, renderer.selectedNodeNumber);
 }
 
-void test_render_with_more_items_above_limit() {
+void test_handle_with_more_items_above_limit() {
   TestMenuRenderer renderer = TestMenuRenderer();
   TestMenuActionsProvider actionsProvider = TestMenuActionsProvider(false, true);
   Menu menu = Menu(renderer, actionsProvider);
@@ -148,6 +148,29 @@ void test_handle_next_action_with_single_item() {
 void test_handle_next_action_with_many_item() {
   TestMenuRenderer renderer = TestMenuRenderer();
   TestMenuActionsProvider actionsProvider = TestMenuActionsProvider(false, true);
+  Menu menu = Menu(renderer, actionsProvider);
+  menu.addItem(new IntegerValueMenuItem("item1", 1));
+  menu.addItem(new IntegerValueMenuItem("item2", 1));
+
+  menu.handle();
+
+  TEST_ASSERT_EQUAL(renderer.selectedNodeNumber, 1);
+}
+
+void test_handle_previous_action_with_single_item() {
+  TestMenuRenderer renderer = TestMenuRenderer();
+  TestMenuActionsProvider actionsProvider = TestMenuActionsProvider(false, false, true);
+  Menu menu = Menu(renderer, actionsProvider);
+  menu.addItem(new IntegerValueMenuItem("item1", 1));
+
+  menu.handle();
+
+  TEST_ASSERT_EQUAL(renderer.selectedNodeNumber, 0);
+}
+
+void test_handle_previous_action_with_many_item() {
+  TestMenuRenderer renderer = TestMenuRenderer();
+  TestMenuActionsProvider actionsProvider = TestMenuActionsProvider(false, false, true);
   Menu menu = Menu(renderer, actionsProvider);
   menu.addItem(new IntegerValueMenuItem("item1", 1));
   menu.addItem(new IntegerValueMenuItem("item2", 1));
@@ -232,6 +255,5 @@ void test_handle_value_menu_item_auto_update() {
 
   TEST_ASSERT_EQUAL(2, item->getValue());
 }
-
 
 #endif

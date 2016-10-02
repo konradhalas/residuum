@@ -16,28 +16,37 @@ class MenuNode {
     void setPrevious(MenuNode *node);
   private:
     MenuItem *item;
+    MenuItem *parent;
     MenuNode *next;
     MenuNode *previous;
 };
 
-class Menu {
+class MenuItemsContainer {
   public:
-    Menu(MenuRenderer &renderer, MenuActionsProvider &actionsProvider, int handleTickFrequency=1);
+    MenuItemsContainer();
+    ~MenuItemsContainer();
     void addItem(MenuItem *item);
-    void render();
-    void handle();
     MenuItem* getItem(int i) const;
     int getItemsCount() const;
-    int getSelectedItemIndex() const;
-    ~Menu();
+
   private:
     MenuNode *root;
-    MenuNode *selectedNode;
+};
+
+class Menu: public MenuItemsContainer {
+  public:
+    Menu(MenuRenderer &renderer, MenuActionsProvider &actionsProvider, int handleTickFrequency=1);
+    void handle();
+    int getSelectedItemIndex() const;
+  private:
+    void render();
+    MenuItem *selectedMenuItem;
     MenuRenderer &renderer;
     MenuActionsProvider &actionsProvider;
     bool isEditMode;
     int tickNumber;
     int handleTickFrequency;
+    bool rendered;
 };
 
 #endif
