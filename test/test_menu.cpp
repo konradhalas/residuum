@@ -5,6 +5,9 @@
 
 class TestMenuRenderer: public MenuRenderer {
   public:
+    TestMenuRenderer() {
+      this->renderedProgress = false;
+    }
     void renderItem(const IntegerValueMenuItem &item, bool isSelected) {
       this->renderItem(isSelected);
     };
@@ -24,10 +27,11 @@ class TestMenuRenderer: public MenuRenderer {
       this->renderedItemsCount = 0;
       this->selectedNodeNumber = -1;
       this->isEditMode = isEditMode;
-      this->renderedProgress = false;
     };
     void renderFinish() {};
-    void renderProgress(const MenuItem &item) {}
+    void renderProgress(const MenuItem &item) {
+      this->renderedProgress = true;
+    }
     int getItemsLimit() { return 5; };
     int renderedItemsCount;
     int selectedNodeNumber;
