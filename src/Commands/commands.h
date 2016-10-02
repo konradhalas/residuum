@@ -1,6 +1,7 @@
 #ifndef COMMANDS_H
 #define COMMANDS_H
 
+#include <Arduino.h>
 #include <Adafruit_GFX.h>
 #include <Adafruit_PCD8544.h>
 #include <QTRSensors.h>
@@ -86,6 +87,21 @@ class MotorCheckCommand: public Command<ActionMenuItem> {
     DRV8835MotorsDriver &motorsDriver;
     int motor;
     int speed;
+};
+
+class FollowCommand: public Command<ActionMenuItem> {
+  public:
+    FollowCommand(Follower &follower, int stopButtonPin, unsigned long timeout): follower(follower), stopButtonPin(stopButtonPin), timeout(timeout) {}
+    void run(ActionMenuItem &item) {
+      unsigned long startTime = millis();
+      while (digitalRead(this->stopButtonPin) == LOW || (millis() - startTime) > timeout) {
+        this->follower.follow();
+      }
+    }
+  private:
+    Follower &follower;
+    int stopButtonPin;
+    unsigned long timeout;
 };
 
 #endif

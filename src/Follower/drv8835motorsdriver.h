@@ -1,5 +1,5 @@
-#ifndef ARDUINO_FOLLOWR_H
-#define ARDUINO_FOLLOWR_H
+#ifndef DRV8835_MOTORS_DRIVER_H
+#define DRV8835_MOTORS_DRIVER_H
 
 #include <follower.h>
 

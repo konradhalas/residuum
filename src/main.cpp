@@ -5,6 +5,7 @@
 #include <Adafruit_PCD8544.h>
 #include <QTRSensors.h>
 
+#include <menu.h>
 #include <follower.h>
 
 #include "consts.h"
@@ -12,6 +13,7 @@
 #include "Menu/pcd8544renderer.h"
 #include "Menu/arduinoactionsprovider.h"
 #include "Follower/drv8835motorsdriver.h"
+#include "Follower/qtrlinedetector.h"
 
 Adafruit_PCD8544 display = Adafruit_PCD8544(LCD_DC_PIN, LCD_CS_PIN, LCD_RST_PIN);
 PCD8544MenuRenderer renderer = PCD8544MenuRenderer(display);
@@ -21,6 +23,8 @@ Menu menu = Menu(renderer, actionsProvider, HANDLE_TICK_FREQUENCY);
 QTRSensorsRC qtr = QTRSensorsRC((unsigned char[]) {RS_1_PIN, RS_2_PIN, RS_3_PIN, RS_4_PIN, RS_5_PIN, RS_6_PIN, RS_7_PIN,RS_8_PIN}, NUMBER_OF_REFLECTANT_SENSORS);
 
 DRV8835MotorsDriver motorsDriver = DRV8835MotorsDriver(MOTOR_LEFT_PHASE, MOTOR_LEFT_ENABLE, MOTOR_RIGHT_PHASE, MOTOR_RIGHT_ENABLE);
+QtrLineDetector lineDetector = QtrLineDetector(qtr, NUMBER_OF_REFLECTANT_SENSORS);
+Follower follower = Follower(lineDetector, motorsDriver);
 
 void setup()   {
   Serial.begin(9600);
@@ -41,7 +45,7 @@ void setup()   {
     menu.addItem(new IntegerValueMenuItem("RS" + String(i), 0, NULL, new ReadReflectanceSensorCommand(qtr, i)));
   }
   menu.addItem(new ActionMenuItem("CALIB", new CalibrateCommand(qtr)));
-  menu.addItem(new ActionMenuItem("START", NULL));
+  menu.addItem(new ActionMenuItem("START", new FollowCommand(follower, EDIT_BUTTON_PIN, FOLLOW_TIMEOUT)));
   menu.render();
 }
 

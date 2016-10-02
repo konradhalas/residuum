@@ -27,3 +27,5 @@
 #define MOTOR_LEFT_PHASE   22 // PF1
 #define MOTOR_RIGHT_ENABLE 6  // PD7 (PWM)
 #define MOTOR_RIGHT_PHASE  21 // PF4
+
+#define FOLLOW_TIMEOUT 10 * 1000 // in ms
