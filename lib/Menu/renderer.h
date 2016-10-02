@@ -13,6 +13,7 @@ class MenuRenderer {
     virtual void renderItem(const BoolValueMenuItem &item, bool isSelected) = 0;
     virtual void renderItem(const ActionMenuItem &item, bool isSelected) = 0;
     virtual void renderStart(bool isEditMode) = 0;
+    virtual void renderProgress(const MenuItem &item) = 0;
     virtual void renderFinish() = 0;
     virtual int getItemsLimit() { return 0; };
 };

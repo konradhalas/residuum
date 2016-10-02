@@ -13,6 +13,7 @@ class PCD8544MenuRenderer: public MenuRenderer {
     void renderItem(const BoolValueMenuItem &item, bool isSelected);
     void renderItem(const ActionMenuItem &item, bool isSelected);
     void renderStart(bool isEditMode);
+    void renderProgress(const MenuItem &item);
     void renderFinish();
     int getItemsLimit() { return 6; };
   private:

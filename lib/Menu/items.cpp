@@ -56,3 +56,7 @@ bool ActionMenuItem::handleEditAction() {
   }
   return false;
 }
+
+bool ActionMenuItem::shouldShowProgress() {
+  return true;
+}

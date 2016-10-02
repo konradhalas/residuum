@@ -18,6 +18,7 @@ class MenuItem {
     virtual void handlePreviousAction() = 0;
     virtual bool handleEditAction() = 0;
     virtual bool handleTick() { return false; }
+    virtual bool shouldShowProgress() { return false; }
     virtual ~MenuItem() {};
     String getName() const { return this->name; }
   private:
@@ -92,6 +93,7 @@ class ActionMenuItem: public MenuItem {
     void handleNextAction();
     void handlePreviousAction();
     bool handleEditAction();
+    bool shouldShowProgress();
   private:
     Command<ActionMenuItem> *command;
 };

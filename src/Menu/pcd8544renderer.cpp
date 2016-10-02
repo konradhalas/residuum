@@ -52,4 +52,13 @@ void PCD8544MenuRenderer::renderFinish() {
   display.display();
 }
 
+void PCD8544MenuRenderer::renderProgress(const MenuItem &item) {
+  display.clearDisplay();
+  display.setTextSize(1);
+  display.setTextColor(BLACK);
+  display.setCursor(0, 0);
+  display.println("\n\n\n" + item.getName() + "...");
+  display.display();
+}
+
 #endif

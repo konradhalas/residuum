@@ -46,8 +46,8 @@ void setup()   {
   for (int i = 1; i <= NUMBER_OF_REFLECTANT_SENSORS; i++) {
     menu.addItem(new IntegerValueMenuItem("RS" + String(i), 0, NULL, new ReadReflectanceSensorCommand(qtr, i)));
   }
-  menu.addItem(new ActionMenuItem("CALIB", new CalibrateCommand(qtr)));
-  menu.addItem(new ActionMenuItem("START", new FollowCommand(follower, EDIT_BUTTON_PIN, FOLLOW_TIMEOUT)));
+  menu.addItem(new ActionMenuItem("CALIBRATE", new CalibrateCommand(qtr)));
+  menu.addItem(new ActionMenuItem("FOLLOW", new FollowCommand(follower, EDIT_BUTTON_PIN, FOLLOW_TIMEOUT)));
   menu.render();
 }
 

@@ -24,12 +24,15 @@ class TestMenuRenderer: public MenuRenderer {
       this->renderedItemsCount = 0;
       this->selectedNodeNumber = -1;
       this->isEditMode = isEditMode;
+      this->renderedProgress = false;
     };
     void renderFinish() {};
+    void renderProgress(const MenuItem &item) {}
     int getItemsLimit() { return 5; };
     int renderedItemsCount;
     int selectedNodeNumber;
     bool isEditMode;
+    bool renderedProgress;
 };
 
 class TestMenuActionsProvider: public MenuActionsProvider {
@@ -189,6 +192,7 @@ void test_handle_toggle_edit_mode_action_with_non_editable_item() {
   menu.handle();
 
   TEST_ASSERT_FALSE(renderer.isEditMode);
+  TEST_ASSERT_TRUE(renderer.renderedProgress);
   TEST_ASSERT_TRUE(command->isAfterRun);
 }
 

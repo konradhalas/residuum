@@ -145,6 +145,9 @@ void Menu::handle() {
     if (this->isEditMode){
       this->isEditMode = false;
     } else {
+      if (this->selectedNode->getItem()->shouldShowProgress()){
+        this->renderer.renderProgress(*this->selectedNode->getItem());
+      }
       bool isEditable = this->selectedNode->getItem()->handleEditAction();
       this->isEditMode = isEditable;
     }
