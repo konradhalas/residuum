@@ -1,3 +1,4 @@
+#include "menu.h"
 #include "items.h"
 
 IntegerValueMenuItem::IntegerValueMenuItem(String name, int value, Command<IntegerValueMenuItem> *onValueChangeCommand, Command<IntegerValueMenuItem> *valueUpdateCommand) : ValueMenuItem<int, Command<IntegerValueMenuItem> >(name, value, onValueChangeCommand, valueUpdateCommand) {}
@@ -50,7 +51,7 @@ void ActionMenuItem::handleNextAction() {
 void ActionMenuItem::handlePreviousAction() {
 }
 
-bool ActionMenuItem::handleEditAction() {
+bool ActionMenuItem::handleEditAction(Menu &menu) {
   if (command != NULL) {
     command->run(*this);
   }
@@ -59,4 +60,41 @@ bool ActionMenuItem::handleEditAction() {
 
 bool ActionMenuItem::shouldShowProgress() {
   return true;
+}
+
+SubMenuItem::SubMenuItem(String name, MenuItemsContainer *parent): MenuItem(name) {
+  this->addItem(new ParentMenuItem(parent, this));
+}
+
+void SubMenuItem::renderDispatch(MenuRenderer &renderer, bool isSelected) {
+  renderer.renderItem(*this, isSelected);
+}
+
+void SubMenuItem::handleNextAction() {
+}
+
+void SubMenuItem::handlePreviousAction() {
+}
+
+bool SubMenuItem::handleEditAction(Menu &menu) {
+  menu.goTo(this, this->getItem(0));
+  return false;
+}
+
+ParentMenuItem::ParentMenuItem(MenuItemsContainer *parent, SubMenuItem *subMenuItem): MenuItem(""), parent(parent), subMenuItem(subMenuItem) {
+}
+
+void ParentMenuItem::renderDispatch(MenuRenderer &renderer, bool isSelected) {
+  renderer.renderItem(*this, isSelected);
+}
+
+void ParentMenuItem::handleNextAction() {
+}
+
+void ParentMenuItem::handlePreviousAction() {
+}
+
+bool ParentMenuItem::handleEditAction(Menu &menu) {
+  menu.goTo(this->parent, this->subMenuItem);
+  return false;
 }

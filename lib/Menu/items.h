@@ -9,6 +9,9 @@ typedef std::string String;
 #endif
 
 #include "renderer.h"
+#include "container.h"
+
+class Menu;
 
 class MenuItem {
   public:
@@ -16,7 +19,7 @@ class MenuItem {
     virtual void renderDispatch(MenuRenderer &renderer, bool isSelected) = 0;
     virtual void handleNextAction() = 0;
     virtual void handlePreviousAction() = 0;
-    virtual bool handleEditAction() = 0;
+    virtual bool handleEditAction(Menu &menu) = 0;
     virtual bool handleTick() { return false; }
     virtual bool shouldShowProgress() { return false; }
     virtual ~MenuItem() {};
@@ -37,7 +40,7 @@ class ValueMenuItem: public MenuItem {
     ValueMenuItem(String name, T value, C *valueChangedCommand = NULL, C *tickHandleCommand = NULL): MenuItem(name), value(value), valueChangedCommand(valueChangedCommand), tickHandleCommand(tickHandleCommand) {}
     T getValue() const { return value; };
     void setValue(T value) { this->value = value; };
-    bool handleEditAction() { return this->valueChangedCommand != NULL; };
+    bool handleEditAction(Menu &menu) { return this->valueChangedCommand != NULL; };
     void handleNextAction() {
       this->updateValueOnNextAction();
       if (this->valueChangedCommand != NULL) {
@@ -92,10 +95,31 @@ class ActionMenuItem: public MenuItem {
     void renderDispatch(MenuRenderer &renderer, bool isSelected);
     void handleNextAction();
     void handlePreviousAction();
-    bool handleEditAction();
+    bool handleEditAction(Menu &menu);
     bool shouldShowProgress();
   private:
     Command<ActionMenuItem> *command;
+};
+
+class SubMenuItem: public MenuItem, public MenuItemsContainer {
+  public:
+    SubMenuItem(String name, MenuItemsContainer *parent);
+    void renderDispatch(MenuRenderer &renderer, bool isSelected);
+    void handleNextAction();
+    void handlePreviousAction();
+    bool handleEditAction(Menu &menu);
+};
+
+class ParentMenuItem: public MenuItem {
+  public:
+    ParentMenuItem(MenuItemsContainer *parent, SubMenuItem *subMenuItem);
+    void renderDispatch(MenuRenderer &renderer, bool isSelected);
+    void handleNextAction();
+    void handlePreviousAction();
+    bool handleEditAction(Menu &menu);
+  private:
+    MenuItemsContainer *parent;
+    SubMenuItem *subMenuItem;
 };
 
 #endif

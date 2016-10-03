@@ -36,6 +36,14 @@ void PCD8544MenuRenderer::renderItem(const ActionMenuItem &item, bool isSelected
     display.println(this->getItemPrefix(isSelected) + item.getName());
 }
 
+void PCD8544MenuRenderer::renderItem(const SubMenuItem &item, bool isSelected) {
+    display.println(this->getItemPrefix(isSelected) + item.getName());
+}
+
+void PCD8544MenuRenderer::renderItem(const ParentMenuItem &item, bool isSelected) {
+    display.println(this->getItemPrefix(isSelected) + "...");
+}
+
 String PCD8544MenuRenderer::getItemPrefix(bool isSelected) {
   String prefix = " ";
   if (isSelected) {

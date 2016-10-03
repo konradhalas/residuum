@@ -33,19 +33,27 @@ void setup()   {
 
   motorsDriver.setup();
 
-  menu.addItem(new ActionMenuItem("MB FWD", new MotorCheckCommand(motorsDriver, MOTOR_BOTH, BASE_MOTOR_SPEED)));
-  menu.addItem(new ActionMenuItem("MB BCK", new MotorCheckCommand(motorsDriver, MOTOR_BOTH, -BASE_MOTOR_SPEED)));
-  menu.addItem(new ActionMenuItem("ML FWD", new MotorCheckCommand(motorsDriver, MOTOR_LEFT, BASE_MOTOR_SPEED)));
-  menu.addItem(new ActionMenuItem("ML BCK", new MotorCheckCommand(motorsDriver, MOTOR_LEFT, -BASE_MOTOR_SPEED)));
-  menu.addItem(new ActionMenuItem("MR FWD", new MotorCheckCommand(motorsDriver, MOTOR_RIGHT, BASE_MOTOR_SPEED)));
-  menu.addItem(new ActionMenuItem("MR BCK", new MotorCheckCommand(motorsDriver, MOTOR_RIGHT, -BASE_MOTOR_SPEED)));
+  SubMenuItem *motorsSubMenu = new SubMenuItem("MOTORS", &menu);
+  motorsSubMenu->addItem(new ActionMenuItem("BOTH FWD", new MotorCheckCommand(motorsDriver, MOTOR_BOTH, BASE_MOTOR_SPEED)));
+  motorsSubMenu->addItem(new ActionMenuItem("BOTH BCK", new MotorCheckCommand(motorsDriver, MOTOR_BOTH, -BASE_MOTOR_SPEED)));
+  motorsSubMenu->addItem(new ActionMenuItem("LEFT FWD", new MotorCheckCommand(motorsDriver, MOTOR_LEFT, BASE_MOTOR_SPEED)));
+  motorsSubMenu->addItem(new ActionMenuItem("LEFT BCK", new MotorCheckCommand(motorsDriver, MOTOR_LEFT, -BASE_MOTOR_SPEED)));
+  motorsSubMenu->addItem(new ActionMenuItem("RIGHT FWD", new MotorCheckCommand(motorsDriver, MOTOR_RIGHT, BASE_MOTOR_SPEED)));
+  motorsSubMenu->addItem(new ActionMenuItem("RIGHT BCK", new MotorCheckCommand(motorsDriver, MOTOR_RIGHT, -BASE_MOTOR_SPEED)));
+  menu.addItem(motorsSubMenu);
 
-  menu.addItem(new IntegerValueMenuItem("CONTR", LCD_CONTRAST, new ChangeContrastCommand(display)));
-  menu.addItem(new BoolValueMenuItem("BCKLI", true, new ToggleBacklightCommand(LCD_LED_PIN)));
-  menu.addItem(new IntegerValueMenuItem("LINE", 0, NULL, new ReadLineCommand(lineDetector)));
+  SubMenuItem *displaySubMenu = new SubMenuItem("DISPLAY", &menu);
+  displaySubMenu->addItem(new IntegerValueMenuItem("CONTR", LCD_CONTRAST, new ChangeContrastCommand(display)));
+  displaySubMenu->addItem(new BoolValueMenuItem("BCKLI", true, new ToggleBacklightCommand(LCD_LED_PIN)));
+  menu.addItem(displaySubMenu);
+
+  SubMenuItem *lineDetectorSubMenu = new SubMenuItem("SENSORS", &menu);
+  lineDetectorSubMenu->addItem(new IntegerValueMenuItem("LINE", 0, NULL, new ReadLineCommand(lineDetector)));
   for (int i = 1; i <= NUMBER_OF_REFLECTANT_SENSORS; i++) {
-    menu.addItem(new IntegerValueMenuItem("RS" + String(i), 0, NULL, new ReadReflectanceSensorCommand(qtr, i)));
+    lineDetectorSubMenu->addItem(new IntegerValueMenuItem("RS" + String(i), 0, NULL, new ReadReflectanceSensorCommand(qtr, i)));
   }
+  menu.addItem(lineDetectorSubMenu);
+
   menu.addItem(new ActionMenuItem("CALIBRATE", new CalibrateCommand(qtr)));
   menu.addItem(new ActionMenuItem("FOLLOW", new FollowCommand(follower, EDIT_BUTTON_PIN, FOLLOW_TIMEOUT)));
 }

@@ -17,6 +17,12 @@ class TestMenuRenderer: public MenuRenderer {
     void renderItem(const ActionMenuItem &item, bool isSelected){
       this->renderItem(isSelected);
     };
+    void renderItem(const SubMenuItem &item, bool isSelected){
+      this->renderItem(isSelected);
+    };
+    void renderItem(const ParentMenuItem &item, bool isSelected){
+      this->renderItem(isSelected);
+    };
     void renderItem(bool isSelected) {
       if (isSelected) {
         this->selectedNodeNumber = this->renderedItemsCount;
@@ -254,6 +260,39 @@ void test_handle_value_menu_item_auto_update() {
   menu.handle();
 
   TEST_ASSERT_EQUAL(2, item->getValue());
+}
+
+void test_handle_toggle_edit_mode_action_with_submenu_item() {
+  TestMenuRenderer renderer = TestMenuRenderer();
+  TestMenuActionsProvider actionsProvider = TestMenuActionsProvider(true, false);
+  Menu menu = Menu(renderer, actionsProvider);
+  TestCommand<ActionMenuItem> *command = new TestCommand<ActionMenuItem>();
+  SubMenuItem *subMenuItem = new SubMenuItem("item", &menu);
+  subMenuItem->addItem(new ActionMenuItem("item1", NULL));
+  subMenuItem->addItem(new ActionMenuItem("item2", NULL));
+  subMenuItem->addItem(new ActionMenuItem("item3", NULL));
+  menu.addItem(subMenuItem);
+
+  menu.handle();
+
+  TEST_ASSERT_EQUAL(4, renderer.renderedItemsCount);
+}
+
+void test_handle_toggle_edit_mode_action_with_parent_menu_item() {
+  TestMenuRenderer renderer = TestMenuRenderer();
+  TestMenuActionsProvider actionsProvider = TestMenuActionsProvider(true, false);
+  Menu menu = Menu(renderer, actionsProvider);
+  TestCommand<ActionMenuItem> *command = new TestCommand<ActionMenuItem>();
+  SubMenuItem *subMenuItem = new SubMenuItem("item", &menu);
+  subMenuItem->addItem(new ActionMenuItem("item1", NULL));
+  subMenuItem->addItem(new ActionMenuItem("item2", NULL));
+  subMenuItem->addItem(new ActionMenuItem("item3", NULL));
+  menu.addItem(subMenuItem);
+
+  menu.handle();
+  menu.handle();
+
+  TEST_ASSERT_EQUAL(1, renderer.renderedItemsCount);
 }
 
 #endif

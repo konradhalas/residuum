@@ -20,6 +20,8 @@ int main(int argc, char const *argv[]) {
   RUN_TEST(test_integer_value_menu_item_handle_next_action);
   RUN_TEST(test_bool_value_menu_item_handle_next_action);
   RUN_TEST(test_handle_value_menu_item_auto_update);
+  RUN_TEST(test_handle_toggle_edit_mode_action_with_submenu_item);
+  RUN_TEST(test_handle_toggle_edit_mode_action_with_parent_menu_item);
 
   RUN_TEST(test_follow_go_straight);
   RUN_TEST(test_follow_turn_left);
