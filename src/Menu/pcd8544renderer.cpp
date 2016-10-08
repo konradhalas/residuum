@@ -9,9 +9,9 @@
 PCD8544MenuRenderer::PCD8544MenuRenderer(Adafruit_PCD8544 &display): display(display) {
 }
 
-void PCD8544MenuRenderer::setup(int lcdLedPin, int contrast) {
+void PCD8544MenuRenderer::setup(int lcdLedPin, int contrast, bool backlight) {
   pinMode(lcdLedPin, OUTPUT);
-  analogWrite(lcdLedPin, 255);
+  analogWrite(lcdLedPin, backlight ? 255 : 0);
   display.begin();
   display.setContrast(contrast);
 }

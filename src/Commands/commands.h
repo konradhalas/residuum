@@ -10,6 +10,13 @@
 #include "Follower/qtrlinedetector.h"
 #include "consts.h"
 #include "menu.h"
+#include "settings.h"
+#include "storage.h"
+#define SAVE_SETTINGS(attr, value) {                                                  \
+                                      Settings settings = Storage<Settings>::load();  \
+                                      settings.attr = value;                          \
+                                      Storage<Settings>::save(settings);              \
+                                   }
 
 class ChangeContrastCommand: public Command<IntegerValueMenuItem> {
   public:
@@ -17,6 +24,7 @@ class ChangeContrastCommand: public Command<IntegerValueMenuItem> {
     }
     void run(IntegerValueMenuItem &item) {
         display.setContrast(item.getValue());
+        SAVE_SETTINGS(lcdContrast, item.getValue());
     }
   private:
     Adafruit_PCD8544 &display;
@@ -27,6 +35,7 @@ class ToggleBacklightCommand: public Command<BoolValueMenuItem> {
     ToggleBacklightCommand(int pin): pin(pin) {}
     void run(BoolValueMenuItem &item) {
         analogWrite(this->pin, item.getValue() ? 255 : 0);
+        SAVE_SETTINGS(lcdBakclight, item.getValue());
     }
   private:
     int pin;

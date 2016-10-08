@@ -7,8 +7,10 @@
 
 #include <menu.h>
 #include <follower.h>
+#include <storage.h>
 
 #include "consts.h"
+#include "settings.h"
 #include "Commands/commands.h"
 #include "Menu/pcd8544renderer.h"
 #include "Menu/arduinoactionsprovider.h"
@@ -29,7 +31,15 @@ Follower follower = Follower(lineDetector, motorsDriver, FOLLOWR_KP, FOLLOWR_KD)
 void setup()   {
   Serial.begin(9600);
 
-  renderer.setup(LCD_LED_PIN, LCD_CONTRAST);
+  Settings settings;
+
+  if (digitalRead(EDIT_BUTTON_PIN) == HIGH) {
+    Storage<Settings>::save(settings);
+  } else {
+     settings = Storage<Settings>::load();
+  }
+
+  renderer.setup(LCD_LED_PIN, settings.lcdContrast, settings.lcdBakclight);
 
   motorsDriver.setup();
 
@@ -43,8 +53,8 @@ void setup()   {
   menu.addItem(motorsSubMenu);
 
   SubMenuItem *displaySubMenu = new SubMenuItem("DISPLAY", &menu);
-  displaySubMenu->addItem(new IntegerValueMenuItem("CONTR", LCD_CONTRAST, new ChangeContrastCommand(display)));
-  displaySubMenu->addItem(new BoolValueMenuItem("BCKLI", true, new ToggleBacklightCommand(LCD_LED_PIN)));
+  displaySubMenu->addItem(new IntegerValueMenuItem("CONTR", settings.lcdContrast, new ChangeContrastCommand(display)));
+  displaySubMenu->addItem(new BoolValueMenuItem("BCKLI", settings.lcdBakclight, new ToggleBacklightCommand(LCD_LED_PIN)));
   menu.addItem(displaySubMenu);
 
   SubMenuItem *lineDetectorSubMenu = new SubMenuItem("SENSORS", &menu);
