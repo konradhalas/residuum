@@ -11,6 +11,7 @@ class PCD8544MenuRenderer: public MenuRenderer {
     void setup(int lcdLedPin, int contrast, bool backlight);
     void renderItem(const IntegerValueMenuItem &item, bool isSelected);
     void renderItem(const BoolValueMenuItem &item, bool isSelected);
+    void renderItem(const FloatValueMenuItem &item, bool isSelected);
     void renderItem(const ActionMenuItem &item, bool isSelected);
     void renderItem(const SubMenuItem &item, bool isSelected);
     void renderItem(const ParentMenuItem &item, bool isSelected);

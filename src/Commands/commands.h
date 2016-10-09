@@ -102,18 +102,37 @@ class MotorCheckCommand: public Command<ActionMenuItem> {
 
 class FollowCommand: public Command<ActionMenuItem> {
   public:
-    FollowCommand(Follower &follower, int stopButtonPin, unsigned long timeout): follower(follower), stopButtonPin(stopButtonPin), timeout(timeout) {}
+    FollowCommand(LineDetector &lineDetector, MotorsDriver &motorsDriver, int stopButtonPin, unsigned long timeout): lineDetector(lineDetector), motorsDriver(motorsDriver), stopButtonPin(stopButtonPin), timeout(timeout) {}
     void run(ActionMenuItem &item) {
+      Settings settigns = Storage<Settings>::load();
+      Follower follower = Follower(this->lineDetector, this->motorsDriver, settigns.followerKp, settigns.followerKd);
       unsigned long startTime = millis();
       while (digitalRead(this->stopButtonPin) == HIGH || (millis() - startTime) < timeout) {
-        this->follower.follow();
+        follower.follow();
       }
-      this->follower.finish();
+      follower.finish();
     }
   private:
-    Follower &follower;
+    LineDetector &lineDetector;
+    MotorsDriver &motorsDriver;
     int stopButtonPin;
     unsigned long timeout;
+};
+
+class UpdateFollowerKpCommand: public Command<FloatValueMenuItem> {
+  public:
+    UpdateFollowerKpCommand(){}
+    void run(FloatValueMenuItem &item) {
+      SAVE_SETTINGS(followerKp, item.getValue());
+    }
+};
+
+class UpdateFollowerKdCommand: public Command<IntegerValueMenuItem> {
+  public:
+    UpdateFollowerKdCommand(){}
+    void run(IntegerValueMenuItem &item) {
+      SAVE_SETTINGS(followerKd, item.getValue());
+    }
 };
 
 #endif

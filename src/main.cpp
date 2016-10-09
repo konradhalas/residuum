@@ -26,7 +26,6 @@ QTRSensorsRC qtr = QTRSensorsRC((unsigned char[]) {RS_1_PIN, RS_2_PIN, RS_3_PIN,
 
 DRV8835MotorsDriver motorsDriver = DRV8835MotorsDriver(MOTOR_LEFT_PHASE, MOTOR_LEFT_ENABLE, MOTOR_RIGHT_PHASE, MOTOR_RIGHT_ENABLE, BASE_MOTOR_SPEED);
 QtrLineDetector lineDetector = QtrLineDetector(qtr, NUMBER_OF_REFLECTANT_SENSORS);
-Follower follower = Follower(lineDetector, motorsDriver, FOLLOWR_KP, FOLLOWR_KD);
 
 void setup()   {
   Serial.begin(9600);
@@ -44,29 +43,29 @@ void setup()   {
   motorsDriver.setup();
 
   SubMenuItem *motorsSubMenu = new SubMenuItem("MOTORS", &menu);
-  motorsSubMenu->addItem(new ActionMenuItem("BOTH FWD", new MotorCheckCommand(motorsDriver, MOTOR_BOTH, BASE_MOTOR_SPEED)));
-  motorsSubMenu->addItem(new ActionMenuItem("BOTH BCK", new MotorCheckCommand(motorsDriver, MOTOR_BOTH, -BASE_MOTOR_SPEED)));
-  motorsSubMenu->addItem(new ActionMenuItem("LEFT FWD", new MotorCheckCommand(motorsDriver, MOTOR_LEFT, BASE_MOTOR_SPEED)));
-  motorsSubMenu->addItem(new ActionMenuItem("LEFT BCK", new MotorCheckCommand(motorsDriver, MOTOR_LEFT, -BASE_MOTOR_SPEED)));
-  motorsSubMenu->addItem(new ActionMenuItem("RIGHT FWD", new MotorCheckCommand(motorsDriver, MOTOR_RIGHT, BASE_MOTOR_SPEED)));
-  motorsSubMenu->addItem(new ActionMenuItem("RIGHT BCK", new MotorCheckCommand(motorsDriver, MOTOR_RIGHT, -BASE_MOTOR_SPEED)));
+  motorsSubMenu->addItem(new ActionMenuItem("LFWD", new MotorCheckCommand(motorsDriver, MOTOR_LEFT, BASE_MOTOR_SPEED)));
+  motorsSubMenu->addItem(new ActionMenuItem("LBCK", new MotorCheckCommand(motorsDriver, MOTOR_LEFT, -BASE_MOTOR_SPEED)));
+  motorsSubMenu->addItem(new ActionMenuItem("RFWD", new MotorCheckCommand(motorsDriver, MOTOR_RIGHT, BASE_MOTOR_SPEED)));
+  motorsSubMenu->addItem(new ActionMenuItem("RBCK", new MotorCheckCommand(motorsDriver, MOTOR_RIGHT, -BASE_MOTOR_SPEED)));
   menu.addItem(motorsSubMenu);
 
   SubMenuItem *displaySubMenu = new SubMenuItem("DISPLAY", &menu);
-  displaySubMenu->addItem(new IntegerValueMenuItem("CONTR", settings.lcdContrast, new ChangeContrastCommand(display)));
-  displaySubMenu->addItem(new BoolValueMenuItem("BCKLI", settings.lcdBakclight, new ToggleBacklightCommand(LCD_LED_PIN)));
+  displaySubMenu->addItem(new IntegerValueMenuItem("CON", settings.lcdContrast, new ChangeContrastCommand(display)));
+  displaySubMenu->addItem(new BoolValueMenuItem("BCK", settings.lcdBakclight, new ToggleBacklightCommand(LCD_LED_PIN)));
   menu.addItem(displaySubMenu);
 
   SubMenuItem *lineDetectorSubMenu = new SubMenuItem("SENSORS", &menu);
-  lineDetectorSubMenu->addItem(new IntegerValueMenuItem("LINE", 0, NULL, new ReadLineCommand(lineDetector)));
+  lineDetectorSubMenu->addItem(new IntegerValueMenuItem("L", 0, NULL, new ReadLineCommand(lineDetector)));
   for (int i = 1; i <= NUMBER_OF_REFLECTANT_SENSORS; i++) {
-    lineDetectorSubMenu->addItem(new IntegerValueMenuItem("RS" + String(i), 0, NULL, new ReadReflectanceSensorCommand(qtr, i)));
+    lineDetectorSubMenu->addItem(new IntegerValueMenuItem("S" + String(i), 0, NULL, new ReadReflectanceSensorCommand(qtr, i)));
   }
   menu.addItem(lineDetectorSubMenu);
 
   SubMenuItem *followerSubMenu = new SubMenuItem("FOLLOWER", &menu);
-  followerSubMenu->addItem(new ActionMenuItem("CALIBRATE", new CalibrateCommand(qtr)));
-  followerSubMenu->addItem(new ActionMenuItem("FOLLOW", new FollowCommand(follower, EDIT_BUTTON_PIN, FOLLOW_TIMEOUT)));
+  followerSubMenu->addItem(new FloatValueMenuItem("KP", settings.followerKp, FOLLOWER_KP_BASE, new UpdateFollowerKpCommand()));
+  followerSubMenu->addItem(new IntegerValueMenuItem("KD", settings.followerKd, new UpdateFollowerKdCommand()));
+  followerSubMenu->addItem(new ActionMenuItem("CALIB", new CalibrateCommand(qtr)));
+  followerSubMenu->addItem(new ActionMenuItem("FOLLOW", new FollowCommand(lineDetector, motorsDriver, EDIT_BUTTON_PIN, FOLLOW_TIMEOUT)));
   menu.addItem(followerSubMenu);
 }
 

@@ -32,6 +32,10 @@ void PCD8544MenuRenderer::renderItem(const BoolValueMenuItem &item, bool isSelec
     display.println(this->getItemPrefix(isSelected) + item.getName() + " = " + (item.getValue() ? "ON" : "OFF"));
 }
 
+void PCD8544MenuRenderer::renderItem(const FloatValueMenuItem &item, bool isSelected) {
+    display.println(this->getItemPrefix(isSelected) + item.getName() + " = " + (int)(item.getValue() * item.getBase()) + "/" + item.getBase());
+}
+
 void PCD8544MenuRenderer::renderItem(const ActionMenuItem &item, bool isSelected) {
     display.println(this->getItemPrefix(isSelected) + item.getName());
 }

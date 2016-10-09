@@ -89,6 +89,19 @@ class BoolValueMenuItem: public ValueMenuItem<bool, Command<BoolValueMenuItem> >
     void dispatchCommandRun(Command<BoolValueMenuItem> *command);
 };
 
+class FloatValueMenuItem: public ValueMenuItem<float, Command<FloatValueMenuItem> > {
+  public:
+    FloatValueMenuItem(String name, float value, int base, Command<FloatValueMenuItem> *valueChangedCommand = NULL, Command<FloatValueMenuItem> *tickHandleCommand = NULL);
+    ~FloatValueMenuItem() {};
+    void renderDispatch(MenuRenderer &renderer, bool isSelected);
+    void updateValueOnNextAction();
+    void updateValueOnPreviousAction();
+    void dispatchCommandRun(Command<FloatValueMenuItem> *command);
+    int getBase() const;
+  private:
+    int base;
+};
+
 class ActionMenuItem: public MenuItem {
   public:
     ActionMenuItem(String name, Command<ActionMenuItem> *command);

@@ -33,6 +33,7 @@
 #define BASE_MOTOR_SPEED 100
 
 #define FOLLOW_TIMEOUT 10 * 1000 // in ms
+#define FOLLOWER_KP_BASE 100
 
-#define FOLLOWR_KP 0.01
-#define FOLLOWR_KD 1
+#define FOLLOWER_KP 0.01
+#define FOLLOWER_KD 1

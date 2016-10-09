@@ -14,6 +14,9 @@ class TestMenuRenderer: public MenuRenderer {
     void renderItem(const BoolValueMenuItem &item, bool isSelected) {
       this->renderItem(isSelected);
     };
+    void renderItem(const FloatValueMenuItem &item, bool isSelected) {
+      this->renderItem(isSelected);
+    };
     void renderItem(const ActionMenuItem &item, bool isSelected){
       this->renderItem(isSelected);
     };
@@ -246,6 +249,16 @@ void test_bool_value_menu_item_handle_next_action() {
   item.handleNextAction();
 
   TEST_ASSERT_TRUE(item.getValue());
+  TEST_ASSERT_TRUE(command->isAfterRun);
+}
+
+void test_float_value_menu_item_handle_next_action() {
+  TestCommand<FloatValueMenuItem> *command = new TestCommand<FloatValueMenuItem>();
+  FloatValueMenuItem item = FloatValueMenuItem("item", 0.1, 10, command);
+
+  item.handleNextAction();
+
+  TEST_ASSERT_FLOAT_WITHIN(0.0001, 0.2, item.getValue());
   TEST_ASSERT_TRUE(command->isAfterRun);
 }
 

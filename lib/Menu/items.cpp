@@ -37,6 +37,28 @@ void BoolValueMenuItem::dispatchCommandRun(Command<BoolValueMenuItem> *command) 
   command->run(*this);
 };
 
+FloatValueMenuItem::FloatValueMenuItem(String name, float value, int base, Command<FloatValueMenuItem> *onValueChangeCommand, Command<FloatValueMenuItem> *valueUpdateCommand) : ValueMenuItem<float, Command<FloatValueMenuItem> >(name, value, onValueChangeCommand, valueUpdateCommand), base(base) {}
+
+void FloatValueMenuItem::updateValueOnNextAction() {
+  this->setValue(this->getValue() + 1 / (float)this->getBase());
+}
+
+void FloatValueMenuItem::updateValueOnPreviousAction() {
+  this->setValue(this->getValue() - 1 / (float)this->getBase());
+}
+
+void FloatValueMenuItem::renderDispatch(MenuRenderer &renderer, bool isSelected) {
+  renderer.renderItem(*this, isSelected);
+}
+
+void FloatValueMenuItem::dispatchCommandRun(Command<FloatValueMenuItem> *command) {
+  command->run(*this);
+};
+
+int FloatValueMenuItem::getBase() const {
+  return this->base;
+}
+
 ActionMenuItem::ActionMenuItem(String name, Command<ActionMenuItem> *command) : MenuItem(name) {
   this->command = command;
 }
