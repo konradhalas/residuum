@@ -64,8 +64,10 @@ void setup()   {
   }
   menu.addItem(lineDetectorSubMenu);
 
-  menu.addItem(new ActionMenuItem("CALIBRATE", new CalibrateCommand(qtr)));
-  menu.addItem(new ActionMenuItem("FOLLOW", new FollowCommand(follower, EDIT_BUTTON_PIN, FOLLOW_TIMEOUT)));
+  SubMenuItem *followerSubMenu = new SubMenuItem("FOLLOWER", &menu);
+  followerSubMenu->addItem(new ActionMenuItem("CALIBRATE", new CalibrateCommand(qtr)));
+  followerSubMenu->addItem(new ActionMenuItem("FOLLOW", new FollowCommand(follower, EDIT_BUTTON_PIN, FOLLOW_TIMEOUT)));
+  menu.addItem(followerSubMenu);
 }
 
 void loop() {
