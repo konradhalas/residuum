@@ -103,14 +103,14 @@ class MotorCheckCommand: public Command<ActionMenuItem> {
 
 class FollowCommand: public Command<ActionMenuItem> {
   public:
-    FollowCommand(LineDetector &lineDetector, MotorsDriver &motorsDriver, int stopButtonPin, unsigned long timeout): lineDetector(lineDetector), motorsDriver(motorsDriver), stopButtonPin(stopButtonPin), timeout(timeout) {}
+    FollowCommand(LineDetector &lineDetector, MotorsDriver &motorsDriver, int stopButtonPin): lineDetector(lineDetector), motorsDriver(motorsDriver), stopButtonPin(stopButtonPin) {}
     void run(ActionMenuItem &item) {
       delay(FOLLOW_START_TIMEOUT);
-      Settings settigns = Storage<Settings>::load();
-      this->motorsDriver.setBaseMotorsSpeed(settigns.motorsBaseSpeed);
-      Follower follower = Follower(this->lineDetector, this->motorsDriver, settigns.followerKp, settigns.followerKd);
+      Settings settings = Storage<Settings>::load();
+      this->motorsDriver.setBaseMotorsSpeed(settings.motorsBaseSpeed);
+      Follower follower = Follower(this->lineDetector, this->motorsDriver, settings.followerKp, settings.followerKd);
       unsigned long startTime = millis();
-      while (digitalRead(this->stopButtonPin) == HIGH || (millis() - startTime) < timeout) {
+      while (digitalRead(this->stopButtonPin) == HIGH || (millis() - startTime) < settings.followTimeout) {
         follower.follow();
       }
       follower.finish();
@@ -119,7 +119,6 @@ class FollowCommand: public Command<ActionMenuItem> {
     LineDetector &lineDetector;
     MotorsDriver &motorsDriver;
     int stopButtonPin;
-    unsigned long timeout;
 };
 
 class UpdateFollowerKpCommand: public Command<FloatValueMenuItem> {
@@ -143,6 +142,14 @@ class UpdateMotorsBaseSpeedCommand: public Command<IntegerValueMenuItem> {
     UpdateMotorsBaseSpeedCommand(){}
     void run(IntegerValueMenuItem &item) {
       SAVE_SETTINGS(motorsBaseSpeed, item.getValue());
+    }
+};
+
+class UpdateFollowTimeoutCommand: public Command<IntegerValueMenuItem> {
+  public:
+    UpdateFollowTimeoutCommand(){}
+    void run(IntegerValueMenuItem &item) {
+      SAVE_SETTINGS(followTimeout, item.getValue());
     }
 };
 

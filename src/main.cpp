@@ -1,6 +1,5 @@
 #ifndef UNIT_TEST
 
-#include <SPI.h>
 #include <Adafruit_GFX.h>
 #include <Adafruit_PCD8544.h>
 #include <QTRSensors.h>
@@ -28,8 +27,6 @@ DRV8835MotorsDriver motorsDriver = DRV8835MotorsDriver(MOTOR_LEFT_PHASE, MOTOR_L
 QtrLineDetector lineDetector = QtrLineDetector(qtr, NUMBER_OF_REFLECTANT_SENSORS);
 
 void setup()   {
-  Serial.begin(9600);
-
   Settings settings;
 
   if (digitalRead(EDIT_BUTTON_PIN) == HIGH) {
@@ -42,13 +39,14 @@ void setup()   {
 
   motorsDriver.setup();
 
-  menu.addItem(new ActionMenuItem("FL", new FollowCommand(lineDetector, motorsDriver, EDIT_BUTTON_PIN, FOLLOW_TIMEOUT)));
+  menu.addItem(new ActionMenuItem("FL", new FollowCommand(lineDetector, motorsDriver, EDIT_BUTTON_PIN)));
   menu.addItem(new ActionMenuItem("CL", new CalibrateCommand(qtr)));
   menu.addItem(new FloatValueMenuItem("KP", settings.followerKp, FOLLOWER_KP_BASE, new UpdateFollowerKpCommand()));
   menu.addItem(new IntegerValueMenuItem("KD", settings.followerKd, new UpdateFollowerKdCommand()));
   menu.addItem(new IntegerValueMenuItem("BS", settings.motorsBaseSpeed, new UpdateMotorsBaseSpeedCommand()));
   menu.addItem(new IntegerValueMenuItem("LI", 0, NULL, new ReadLineCommand(lineDetector)));
   menu.addItem(new ActionMenuItem("MT", new MotorCheckCommand(motorsDriver, MOTOR_BOTH)));
+  menu.addItem(new IntegerValueMenuItem("FT", settings.followTimeout, new UpdateFollowTimeoutCommand()));
 }
 
 void loop() {
