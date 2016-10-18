@@ -1,3 +1,5 @@
+#define S(val) val * 1000
+
 #define NEXT_BUTTON_PIN 7 // PE6
 #define EDIT_BUTTON_PIN 13 // PC7
 #define PREVIOUS_BUTTON_PIN 23 // PF0
@@ -33,9 +35,10 @@
 #define MOTOR_RIGHT_PHASE  21 // PF4
 
 #define BASE_MOTOR_SPEED 120
-#define MOTOR_CHECK_TIMEOUT 3000
+#define MOTOR_CHECK_TIMEOUT S(3)
 
-#define FOLLOW_TIMEOUT 5 * 1000 // in ms
+#define FOLLOW_TIMEOUT S(5)
+#define FOLLOW_START_TIMEOUT S(1)
 #define FOLLOWER_KP_BASE 100
 
 #define FOLLOWER_KP 0.05

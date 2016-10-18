@@ -105,6 +105,7 @@ class FollowCommand: public Command<ActionMenuItem> {
   public:
     FollowCommand(LineDetector &lineDetector, MotorsDriver &motorsDriver, int stopButtonPin, unsigned long timeout): lineDetector(lineDetector), motorsDriver(motorsDriver), stopButtonPin(stopButtonPin), timeout(timeout) {}
     void run(ActionMenuItem &item) {
+      delay(FOLLOW_START_TIMEOUT);
       Settings settigns = Storage<Settings>::load();
       this->motorsDriver.setBaseMotorsSpeed(settigns.motorsBaseSpeed);
       Follower follower = Follower(this->lineDetector, this->motorsDriver, settigns.followerKp, settigns.followerKd);
