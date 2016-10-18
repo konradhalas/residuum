@@ -49,6 +49,7 @@ int Menu::getSelectedItemIndex() const {
 
 void Menu::handle() {
   bool handledAction = false;
+  bool handledTick = true;
   int itemsCount = this->container->getItemsCount();
 
   if (this->selectedMenuItem == NULL && itemsCount) {
@@ -60,7 +61,7 @@ void Menu::handle() {
       for (int i = 0; i < itemsCount; i++) {
         bool handled = this->container->getItem(i)->handleTick();
         if (handled) {
-          handledAction = true;
+          handledTick = true;
         }
       }
     }
@@ -98,10 +99,12 @@ void Menu::handle() {
     handledAction = true;
   }
 
-  if (handledAction || !this->rendered) {
+  if (handledAction || handledTick || !this->rendered) {
     render();
     this->rendered = true;
-    this->actionsProvider.afterActionHandler();
+    if (handledAction) {
+        this->actionsProvider.afterActionHandler();
+    }
   }
 }
 
