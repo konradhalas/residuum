@@ -26,6 +26,13 @@ QTRSensorsRC qtr = QTRSensorsRC((unsigned char[]) {RS_1_PIN, RS_2_PIN, RS_3_PIN,
 DRV8835MotorsDriver motorsDriver = DRV8835MotorsDriver(MOTOR_LEFT_PHASE, MOTOR_LEFT_ENABLE, MOTOR_RIGHT_PHASE, MOTOR_RIGHT_ENABLE, BASE_MOTOR_SPEED);
 QtrLineDetector lineDetector = QtrLineDetector(qtr, NUMBER_OF_REFLECTANT_SENSORS);
 
+void indicateSetupFinish() {
+  pinMode(STATUS_LED_PIN, OUTPUT);
+  digitalWrite(STATUS_LED_PIN, HIGH);
+  delay(BUTTONS_DELAY);
+  digitalWrite(STATUS_LED_PIN, LOW);
+}
+
 void setup()   {
   Settings settings;
 
@@ -47,6 +54,8 @@ void setup()   {
   menu.addItem(new IntegerValueMenuItem("LI", 0, NULL, new ReadLineCommand(lineDetector)));
   menu.addItem(new ActionMenuItem("MT", new MotorCheckCommand(motorsDriver, MOTOR_BOTH)));
   menu.addItem(new IntegerValueMenuItem("FT", settings.followTimeout, new UpdateFollowTimeoutCommand()));
+
+  indicateSetupFinish();
 }
 
 void loop() {
