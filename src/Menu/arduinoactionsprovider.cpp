@@ -4,13 +4,16 @@
 
 #include "arduinoactionsprovider.h"
 
-ArduinoMenuActionsProvider::ArduinoMenuActionsProvider(int nextButton, int editButton, int previousButton, int buttonsDealy) {
+ArduinoMenuActionsProvider::ArduinoMenuActionsProvider(int nextButton, int editButton, int previousButton, int actionLedPin, int buttonsDealy) {
   this->nextButton = nextButton;
   this->editButton = editButton;
   this->previousButton = previousButton;
+  this->actionLedPin = actionLedPin;
   this->buttonsDealy = buttonsDealy;
   pinMode(nextButton, INPUT);
   pinMode(editButton, INPUT);
+  pinMode(previousButton, INPUT);
+  pinMode(actionLedPin, OUTPUT);
 }
 
 bool ArduinoMenuActionsProvider::isToggleEditModeAction() {
@@ -26,7 +29,9 @@ bool ArduinoMenuActionsProvider::isPreviousAction() {
 };
 
 void ArduinoMenuActionsProvider::afterActionHandler() {
+  digitalWrite(this->actionLedPin, HIGH);
   delay(this->buttonsDealy);
+  digitalWrite(this->actionLedPin, LOW);
 };
 
 #endif

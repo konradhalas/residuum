@@ -7,6 +7,8 @@
 #define LCD_CS_PIN 10 // SCE, PB6
 #define LCD_RST_PIN 9 // PB5
 
+#define STATUS_LED_PIN 11
+
 #define RS_1_PIN 2  // PD1
 #define RS_2_PIN 0  // PD2
 #define RS_3_PIN 1  // PD3

@@ -5,7 +5,7 @@
 
 class ArduinoMenuActionsProvider: public MenuActionsProvider {
   public:
-    ArduinoMenuActionsProvider(int nextButton, int editButton, int previousButton, int buttonsDealy);
+    ArduinoMenuActionsProvider(int nextButton, int editButton, int previousButton, int actionLedPin, int buttonsDealy);
     bool isToggleEditModeAction();
     bool isNextAction();
     bool isPreviousAction();
@@ -14,6 +14,7 @@ class ArduinoMenuActionsProvider: public MenuActionsProvider {
     int nextButton;
     int editButton;
     int previousButton;
+    int actionLedPin;
     int buttonsDealy;
 };
 
