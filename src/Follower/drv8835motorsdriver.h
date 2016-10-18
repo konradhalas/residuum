@@ -10,6 +10,7 @@ class DRV8835MotorsDriver: public MotorsDriver {
     void setLeftMotorSpeed(int speed);
     void setRightMotorSpeed(int speed);
     int getBaseMotorSpeed();
+    void setBaseMotorsSpeed(int speed);
   private:
     void setSpeed(int phasePin, int enablePin, int speed);
     int leftMotorPhasePin;

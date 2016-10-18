@@ -10,15 +10,15 @@
 #define RS_1_PIN 2  // PD1
 #define RS_2_PIN 0  // PD2
 #define RS_3_PIN 1  // PD3
-#define RS_4_PIN 12 // PD6
-#define RS_5_PIN 4  // PD4
+#define RS_4_PIN 4  // PD4
+#define RS_5_PIN 12 // PD6
 #define RS_6_PIN 18 // PF7
 #define RS_7_PIN 19  // PF6
 #define RS_8_PIN 20 // PF5
 
 #define BUTTONS_DELAY 500
 #define LCD_CONTRAST 55
-#define LCD_BAKCLIGHT true
+#define LCD_BAKCLIGHT false
 #define NUMBER_OF_REFLECTANT_SENSORS 8
 #define HANDLE_TICK_FREQUENCY 20000
 
@@ -30,10 +30,11 @@
 #define MOTOR_RIGHT_ENABLE 6  // PD7 (PWM)
 #define MOTOR_RIGHT_PHASE  21 // PF4
 
-#define BASE_MOTOR_SPEED 100
+#define BASE_MOTOR_SPEED 120
+#define MOTOR_CHECK_TIMEOUT 3000
 
-#define FOLLOW_TIMEOUT 10 * 1000 // in ms
+#define FOLLOW_TIMEOUT 5 * 1000 // in ms
 #define FOLLOWER_KP_BASE 100
 
-#define FOLLOWER_KP 0.01
+#define FOLLOWER_KP 0.05
 #define FOLLOWER_KD 1

@@ -58,8 +58,9 @@ class CalibrateCommand: public Command<ActionMenuItem> {
   public:
   CalibrateCommand(QTRSensorsRC &qtr): qtr(qtr) {}
   void run(ActionMenuItem &item) {
-    for (int i = 0; i < 400; i++) {
+    for (int i = 0; i < 250; i++) {
       this->qtr.calibrate();
+      delay(20);
     }
   }
   private:
@@ -78,15 +79,16 @@ class ReadLineCommand: public Command<IntegerValueMenuItem> {
 
 class MotorCheckCommand: public Command<ActionMenuItem> {
   public:
-    MotorCheckCommand(DRV8835MotorsDriver &motorsDriver, int motor, int speed): motorsDriver(motorsDriver), motor(motor), speed(speed) {}
+    MotorCheckCommand(DRV8835MotorsDriver &motorsDriver, int motor): motorsDriver(motorsDriver), motor(motor) {}
     void run(ActionMenuItem &item) {
+      Settings settigns = Storage<Settings>::load();
       if (this->motor == MOTOR_LEFT || this->motor == MOTOR_BOTH) {
-        this->motorsDriver.setLeftMotorSpeed(this->speed);
+        this->motorsDriver.setLeftMotorSpeed(settigns.motorsBaseSpeed);
       }
       if (this->motor == MOTOR_RIGHT || this->motor == MOTOR_BOTH) {
-        this->motorsDriver.setRightMotorSpeed(this->speed);
+        this->motorsDriver.setRightMotorSpeed(settigns.motorsBaseSpeed);
       }
-      delay(2000);
+      delay(MOTOR_CHECK_TIMEOUT);
       if (this->motor == MOTOR_LEFT || this->motor == MOTOR_BOTH) {
         this->motorsDriver.setLeftMotorSpeed(0);
       }
@@ -97,7 +99,6 @@ class MotorCheckCommand: public Command<ActionMenuItem> {
   private:
     DRV8835MotorsDriver &motorsDriver;
     int motor;
-    int speed;
 };
 
 class FollowCommand: public Command<ActionMenuItem> {
@@ -105,6 +106,7 @@ class FollowCommand: public Command<ActionMenuItem> {
     FollowCommand(LineDetector &lineDetector, MotorsDriver &motorsDriver, int stopButtonPin, unsigned long timeout): lineDetector(lineDetector), motorsDriver(motorsDriver), stopButtonPin(stopButtonPin), timeout(timeout) {}
     void run(ActionMenuItem &item) {
       Settings settigns = Storage<Settings>::load();
+      this->motorsDriver.setBaseMotorsSpeed(settigns.motorsBaseSpeed);
       Follower follower = Follower(this->lineDetector, this->motorsDriver, settigns.followerKp, settigns.followerKd);
       unsigned long startTime = millis();
       while (digitalRead(this->stopButtonPin) == HIGH || (millis() - startTime) < timeout) {
@@ -132,6 +134,14 @@ class UpdateFollowerKdCommand: public Command<IntegerValueMenuItem> {
     UpdateFollowerKdCommand(){}
     void run(IntegerValueMenuItem &item) {
       SAVE_SETTINGS(followerKd, item.getValue());
+    }
+};
+
+class UpdateMotorsBaseSpeedCommand: public Command<IntegerValueMenuItem> {
+  public:
+    UpdateMotorsBaseSpeedCommand(){}
+    void run(IntegerValueMenuItem &item) {
+      SAVE_SETTINGS(motorsBaseSpeed, item.getValue());
     }
 };
 

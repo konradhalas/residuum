@@ -42,31 +42,13 @@ void setup()   {
 
   motorsDriver.setup();
 
-  SubMenuItem *motorsSubMenu = new SubMenuItem("MOTORS", &menu);
-  motorsSubMenu->addItem(new ActionMenuItem("LFWD", new MotorCheckCommand(motorsDriver, MOTOR_LEFT, BASE_MOTOR_SPEED)));
-  motorsSubMenu->addItem(new ActionMenuItem("LBCK", new MotorCheckCommand(motorsDriver, MOTOR_LEFT, -BASE_MOTOR_SPEED)));
-  motorsSubMenu->addItem(new ActionMenuItem("RFWD", new MotorCheckCommand(motorsDriver, MOTOR_RIGHT, BASE_MOTOR_SPEED)));
-  motorsSubMenu->addItem(new ActionMenuItem("RBCK", new MotorCheckCommand(motorsDriver, MOTOR_RIGHT, -BASE_MOTOR_SPEED)));
-  menu.addItem(motorsSubMenu);
-
-  SubMenuItem *displaySubMenu = new SubMenuItem("DISPLAY", &menu);
-  displaySubMenu->addItem(new IntegerValueMenuItem("CON", settings.lcdContrast, new ChangeContrastCommand(display)));
-  displaySubMenu->addItem(new BoolValueMenuItem("BCK", settings.lcdBakclight, new ToggleBacklightCommand(LCD_LED_PIN)));
-  menu.addItem(displaySubMenu);
-
-  SubMenuItem *lineDetectorSubMenu = new SubMenuItem("SENSORS", &menu);
-  lineDetectorSubMenu->addItem(new IntegerValueMenuItem("L", 0, NULL, new ReadLineCommand(lineDetector)));
-  for (int i = 1; i <= NUMBER_OF_REFLECTANT_SENSORS; i++) {
-    lineDetectorSubMenu->addItem(new IntegerValueMenuItem("S" + String(i), 0, NULL, new ReadReflectanceSensorCommand(qtr, i)));
-  }
-  menu.addItem(lineDetectorSubMenu);
-
-  SubMenuItem *followerSubMenu = new SubMenuItem("FOLLOWER", &menu);
-  followerSubMenu->addItem(new FloatValueMenuItem("KP", settings.followerKp, FOLLOWER_KP_BASE, new UpdateFollowerKpCommand()));
-  followerSubMenu->addItem(new IntegerValueMenuItem("KD", settings.followerKd, new UpdateFollowerKdCommand()));
-  followerSubMenu->addItem(new ActionMenuItem("CALIB", new CalibrateCommand(qtr)));
-  followerSubMenu->addItem(new ActionMenuItem("FOLLOW", new FollowCommand(lineDetector, motorsDriver, EDIT_BUTTON_PIN, FOLLOW_TIMEOUT)));
-  menu.addItem(followerSubMenu);
+  menu.addItem(new ActionMenuItem("CALIB", new CalibrateCommand(qtr)));
+  menu.addItem(new ActionMenuItem("FOLLOW", new FollowCommand(lineDetector, motorsDriver, EDIT_BUTTON_PIN, FOLLOW_TIMEOUT)));
+  menu.addItem(new FloatValueMenuItem("KP", settings.followerKp, FOLLOWER_KP_BASE, new UpdateFollowerKpCommand()));
+  menu.addItem(new IntegerValueMenuItem("KD", settings.followerKd, new UpdateFollowerKdCommand()));
+  menu.addItem(new IntegerValueMenuItem("BS", settings.motorsBaseSpeed, new UpdateMotorsBaseSpeedCommand()));
+  menu.addItem(new IntegerValueMenuItem("LI", 0, NULL, new ReadLineCommand(lineDetector)));
+  menu.addItem(new ActionMenuItem("MT", new MotorCheckCommand(motorsDriver, MOTOR_BOTH)));
 }
 
 void loop() {

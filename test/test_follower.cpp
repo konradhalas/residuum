@@ -14,6 +14,7 @@ class TestMotorsDriver: public MotorsDriver {
     int getBaseMotorSpeed() {
       return 10;
     }
+    void setBaseMotorsSpeed(int speed) {}
     int leftMotorSpeed;
     int rightMotorSpeed;
 };

@@ -31,6 +31,10 @@ int DRV8835MotorsDriver::getBaseMotorSpeed() {
   return this->baseSpeed;
 }
 
+void DRV8835MotorsDriver::setBaseMotorsSpeed(int speed) {
+  this->baseSpeed = speed;
+}
+
 void DRV8835MotorsDriver::setSpeed(int phasePin, int enablePin, int speed) {
   digitalWrite(phasePin, speed > 0 ? HIGH : LOW);
   if (speed < 0) {
