@@ -1,4 +1,5 @@
-#define S(val) val * 1000
+#define MS 1000
+#define S(val) val * MS
 
 #define NEXT_BUTTON_PIN 7 // PE6
 #define EDIT_BUTTON_PIN 13 // PC7

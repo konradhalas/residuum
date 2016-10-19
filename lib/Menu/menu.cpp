@@ -49,7 +49,7 @@ int Menu::getSelectedItemIndex() const {
 
 void Menu::handle() {
   bool handledAction = false;
-  bool handledTick = true;
+  bool handledTick = false;
   int itemsCount = this->container->getItemsCount();
 
   if (this->selectedMenuItem == NULL && itemsCount) {

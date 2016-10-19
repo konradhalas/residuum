@@ -6,6 +6,11 @@ def line_range(sensors_count):
 def pid(error, last_error, kp, kd):
     return int(kp * error + kd * (error - last_error))
 
+def warn(content, should_warn, template):
+    rendered =  template.format(content)
+    if should_warn:
+        return '\033[91m' + rendered + '\033[0m'
+    return rendered
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
@@ -23,10 +28,10 @@ if __name__ == '__main__':
             kp=args.kp,
             kd=args.kd,
         )
-        print("{} = error: {:5d}, delta: {:6.1f}, motors: {:3d}, {:3d}".format(
+        print("{} = error: {:5d}, delta: {:6.1f}, motors: {}, {}".format(
             line_over + 1,
             error,
             pid_delta,
-            args.speed + pid_delta,
-            args.speed - pid_delta,
+            warn(args.speed + pid_delta, not(-255 <= (args.speed + pid_delta) <= 255), '{:3d}') ,
+            warn(args.speed - pid_delta, not(-255 <= (args.speed - pid_delta) <= 255), '{:3d}') ,
         ))

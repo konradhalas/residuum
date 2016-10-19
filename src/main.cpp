@@ -53,7 +53,7 @@ void setup()   {
   menu.addItem(new IntegerValueMenuItem("BS", settings.motorsBaseSpeed, new UpdateMotorsBaseSpeedCommand()));
   menu.addItem(new IntegerValueMenuItem("LI", 0, NULL, new ReadLineCommand(lineDetector)));
   menu.addItem(new ActionMenuItem("MT", new MotorCheckCommand(motorsDriver, MOTOR_BOTH)));
-  menu.addItem(new IntegerValueMenuItem("FT", settings.followTimeout, new UpdateFollowTimeoutCommand()));
+  menu.addItem(new IntegerValueMenuItem("FT", settings.followTimeout / MS, new UpdateFollowTimeoutCommand()));
 
   indicateSetupFinish();
 }

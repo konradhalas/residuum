@@ -110,7 +110,7 @@ class FollowCommand: public Command<ActionMenuItem> {
       this->motorsDriver.setBaseMotorsSpeed(settings.motorsBaseSpeed);
       Follower follower = Follower(this->lineDetector, this->motorsDriver, settings.followerKp, settings.followerKd);
       unsigned long startTime = millis();
-      while (digitalRead(this->stopButtonPin) == HIGH || (millis() - startTime) < settings.followTimeout) {
+      while (digitalRead(this->stopButtonPin) == LOW && (settings.followTimeout == 0 || (millis() - startTime) < settings.followTimeout)) {
         follower.follow();
       }
       follower.finish();
@@ -149,7 +149,7 @@ class UpdateFollowTimeoutCommand: public Command<IntegerValueMenuItem> {
   public:
     UpdateFollowTimeoutCommand(){}
     void run(IntegerValueMenuItem &item) {
-      SAVE_SETTINGS(followTimeout, item.getValue());
+      SAVE_SETTINGS(followTimeout, item.getValue() * MS);
     }
 };
 
