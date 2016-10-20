@@ -1,3 +1,5 @@
+#!/usr/bin/env python
+
 import argparse
 
 def line_range(sensors_count):
@@ -17,7 +19,7 @@ if __name__ == '__main__':
     parser.add_argument("--speed", type=int, required=True)
     parser.add_argument("--sensors", type=int, required=True)
     parser.add_argument("--kp", type=float, required=True)
-    parser.add_argument("--kd", type=int, required=True)
+    parser.add_argument("--kd", type=float, required=True)
     args = parser.parse_args()
 
     for line_over in range(args.sensors):
