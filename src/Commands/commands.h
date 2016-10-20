@@ -58,7 +58,7 @@ class CalibrateCommand: public Command<ActionMenuItem> {
   public:
   CalibrateCommand(QTRSensorsRC &qtr): qtr(qtr) {}
   void run(ActionMenuItem &item) {
-    for (int i = 0; i < 250; i++) {
+    for (int i = 0; i < 150; i++) {
       this->qtr.calibrate();
       delay(20);
     }
@@ -129,10 +129,10 @@ class UpdateFollowerKpCommand: public Command<FloatValueMenuItem> {
     }
 };
 
-class UpdateFollowerKdCommand: public Command<IntegerValueMenuItem> {
+class UpdateFollowerKdCommand: public Command<FloatValueMenuItem> {
   public:
     UpdateFollowerKdCommand(){}
-    void run(IntegerValueMenuItem &item) {
+    void run(FloatValueMenuItem &item) {
       SAVE_SETTINGS(followerKd, item.getValue());
     }
 };

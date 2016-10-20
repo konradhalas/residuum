@@ -49,7 +49,7 @@ void setup()   {
   menu.addItem(new ActionMenuItem("FL", new FollowCommand(lineDetector, motorsDriver, EDIT_BUTTON_PIN)));
   menu.addItem(new ActionMenuItem("CL", new CalibrateCommand(qtr)));
   menu.addItem(new FloatValueMenuItem("KP", settings.followerKp, FOLLOWER_KP_BASE, new UpdateFollowerKpCommand()));
-  menu.addItem(new IntegerValueMenuItem("KD", settings.followerKd, new UpdateFollowerKdCommand()));
+  menu.addItem(new FloatValueMenuItem("KD", settings.followerKd, FOLLOWER_KD_BASE, new UpdateFollowerKdCommand()));
   menu.addItem(new IntegerValueMenuItem("BS", settings.motorsBaseSpeed, new UpdateMotorsBaseSpeedCommand()));
   menu.addItem(new IntegerValueMenuItem("LI", 0, NULL, new ReadLineCommand(lineDetector)));
   menu.addItem(new ActionMenuItem("MT", new MotorCheckCommand(motorsDriver, MOTOR_BOTH)));

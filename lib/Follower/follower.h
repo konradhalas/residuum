@@ -6,15 +6,15 @@
 
 class Follower {
   public:
-    Follower(LineDetector &lineDetector, MotorsDriver &motorsDriver, double kP=0.1, int kD=5): lineDetector(lineDetector), motorsDriver(motorsDriver), kP(kP), kD(kD), lastError(0) {}
+    Follower(LineDetector &lineDetector, MotorsDriver &motorsDriver, float kP=0.1, float kD=5.0): lineDetector(lineDetector), motorsDriver(motorsDriver), kP(kP), kD(kD), lastError(0) {}
     void follow();
     void finish();
   private:
     LineDetector &lineDetector;
     MotorsDriver &motorsDriver;
     int lastError;
-    double kP;
-    int kD;
+    float kP;
+    float kD;
 };
 
 #endif
