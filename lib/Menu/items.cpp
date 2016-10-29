@@ -40,11 +40,11 @@ void BoolValueMenuItem::dispatchCommandRun(Command<BoolValueMenuItem> *command) 
 FloatValueMenuItem::FloatValueMenuItem(String name, float value, int base, Command<FloatValueMenuItem> *onValueChangeCommand, Command<FloatValueMenuItem> *valueUpdateCommand) : ValueMenuItem<float, Command<FloatValueMenuItem> >(name, value, onValueChangeCommand, valueUpdateCommand), base(base) {}
 
 void FloatValueMenuItem::updateValueOnNextAction() {
-  this->setValue(this->getValue() + 1 / (float)this->getBase());
+  this->setValue((this->getValue() * this->getBase() + 1) / (float)this->getBase());
 }
 
 void FloatValueMenuItem::updateValueOnPreviousAction() {
-  this->setValue(this->getValue() - 1 / (float)this->getBase());
+  this->setValue((this->getValue() * this->getBase() - 1) / (float)this->getBase());
 }
 
 void FloatValueMenuItem::renderDispatch(MenuRenderer &renderer, bool isSelected) {
