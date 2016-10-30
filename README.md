@@ -167,4 +167,14 @@ Sum: **491 PLN** (110 EUR / 125 USD)
 
 ## What's next
 
-TODO - describe next version of Residuum
+I achieved the main goal of this project - I took part in robots contest, but I
+placed... almost last. Only two LEGO-based robots were slower then me. My best
+time was `13.046` and fastest robot finished the same track in `6.683`. It
+means that I can't upgrade Residuum, I have to build something from scratch, but
+this time with other requirements.
+
+## Robocomp 2016
+
+One of my fastest ride from Robocomp 2016 in Kraków:
+
+[![Residuum during Robocomp 2016](https://img.youtube.com/vi/713GhhHsxbs/0.jpg)](https://www.youtube.com/watch?v=713GhhHsxbs)
