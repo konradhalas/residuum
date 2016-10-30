@@ -30,11 +30,11 @@ more important in this project - Arduino is very easy to use.
 
 Next body part - eyes. I used Pololu QTR-8RC with 8 reflectance sensors to
 detect line in front of my construction. This module is specially designed for
-line following robots. Moreover, supplier provide library for Arduino family
+line following robots. Moreover, supplier provides library for Arduino family
 and all you have to do is call `readLine()` function - simple like that. Another
-advantage of QTR-8RC is that it works with digital I/O pins, so number of
-analog-to-digital converters it's not a problem (e.g. my Arduino has only 6 of
-them).
+advantage of QTR-8RC is that it works with digital I/O pins, so limited number
+of analog-to-digital converters it's not a problem (e.g. my Arduino has only 6
+of them).
 
 ![sensors](/other/photos/photo_sensors.jpg?raw=true)
 
@@ -59,6 +59,8 @@ Last but not least - LCD screen and a few tact switches. This is interface
 between my and the robot. I'am using SparkFun Graphic LCD 84x48 (which is mostly
 known as a screen from Nokia 5110) to display and control all robots settings
 and functions.
+
+![sensors](/other/photos/photo_board.jpg?raw=true)
 
 All those parts was soldered in a shape of Arduino shield. I used 50 x 70 mm
 PCB prototype matrix board.
