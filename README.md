@@ -5,11 +5,11 @@ board, array of eight reflectance sensors and two DC motors.
 
 ![Residuum Robot](/other/photos/photo_1.jpg?raw=true)
 
-The main goal of this project was to take part in a robots contest as fast as
-possible. Such attitude helped me to finish this project quite fast (~2 months),
-but also resolved many of my doubts - whenever I had a few possible solutions,
-I chose the easier one. Of course such approach has also drawbacks - Residuum
-it's definitely not a speed daemon.
+The main goal of this project was to take part in a robots contest as quick as
+possible. Such attitude helped me to finish this project in a short time
+(~2 months), but also resolved many of my doubts - whenever I had a few possible
+solutions, I chose the easier one. Of course such approach has also drawbacks -
+Residuum it's definitely not a speed daemon.
 
 However, project is done and I learned a lot during this time. Robots contest
 was also a very good lesson for such beginner like I am. I have many ideas
@@ -51,9 +51,9 @@ only 16g and it can power my robot for a few minutes of driving. It's more then
 enough in context of robots contest, where you can change your battery for a
 fresh one even every single ride.
 
-Voltage from Li-Pol is ideal for motors, but it's a little bit high for digital
-part of Residuum. I have to use Pololu D24V10F3 step-down voltage regulator,
-which reduces 7.4V to 3.3V.
+Voltage from two cells Li-Pol is ideal for motors, but it's a little bit too
+high for digital part of Residuum. I have to use Pololu D24V10F3 step-down
+voltage regulator, which reduces 7.4V to 3.3V.
 
 Last but not least - LCD screen and a few tact switches. This is interface
 between my and the robot. I'am using SparkFun Graphic LCD 84x48 (which is mostly
@@ -62,8 +62,8 @@ and functions.
 
 ![sensors](/other/photos/photo_board.jpg?raw=true)
 
-All those parts was soldered in a shape of Arduino shield. I used 50 x 70 mm
-PCB prototype matrix board.
+All those parts were soldered on a single board in a shape of Arduino shield. I
+used 50 x 70 mm PCB prototype matrix board.
 
 ## Mechanics
 
@@ -73,7 +73,7 @@ honest I didn't spend much time to calculate is it the best choice in my case.
 I've seen that many people are using those motors, so I ordered them too. Torque
 is high enough to move my construction smoothly. I bought also two Pololu 60×8mm
 wheels, Pololu motors brackets and Pololu ball caster (3/8" Plastic Ball) which
-is placed in front of the Residuum. The same supplier means that everything fits
+is placed in front of Residuum. The same supplier means that everything fits
 perfectly together.
 
 ![sensors](/other/photos/photo_mechanics.jpg?raw=true)
@@ -91,6 +91,11 @@ Maybe Residuum chassis does not follow latest design fashions but it combines
 with other parts perfectly.
 
 ## Software
+
+Residuum program is written in C++. I used *PlatformIO* environment to manage
+build process, requirements and tests. *PlatformIO* toolset provides many useful
+features like CI integration and Atom editor plugin. It really helps me a lot to
+find myself in a little bit old-school C++ world.
 
 TODO - C++, PlatformIO, PID and Menu
 
