@@ -19,16 +19,16 @@ Let's go briefly through all construction details.
 
 ## Electronics
 
-Arduino Leonardo is a Residuum brain. I used this board because a years ago I
+*Arduino Leonardo* is a Residuum brain. I used this board because a years ago I
 attended to soldering workshops and during this event we assembled Arduino
 Leonardo. So it's not an original board, but my own production. It has
-ATmega32U4 microcontroller with 32kB flash memory, 2.5kB RAM, 1kB EEPROM, built
+*ATmega32U4* microcontroller with 32kB flash memory, 2.5kB RAM, 1kB EEPROM, built
 in USB 2.0 controller and a few standard LEDs and buttons. Nothing fancy, but
-what was more important in this project - Arduino is very easy to use.
+what was more important in this project - it's easy to use.
 
 ![electronics](/other/photos/photo_electronics.jpg?raw=true)
 
-Next body part - eyes. I used Pololu QTR-8RC with 8 reflectance sensors to
+Next body part - eyes. I used *Pololu QTR-8RC* with 8 reflectance sensors to
 detect line in front of my construction. This module is specially designed for
 line following robots. Moreover, supplier provides library for Arduino family
 and all you have to do is call `readLine()` function - simple like that. Another
@@ -41,22 +41,23 @@ of them).
 Ok, so we have brain and eyes - we can see the line and we can decide where to
 go - now we have to move robot in given direction.
 
-Residuum is using Pololu DRV8835 dual motor driver to control two DC motors.
-This tiny H-bridge module allows you to drive pairs of motors with standard PWM
-speed control and also separate your main circuit from motors voltage supply.
+Residuum is using *Pololu DRV8835 dual motor driver* to control two DC motors.
+This tiny H-bridge module allows you to drive pair of motors with standard PWM
+speed control and also it separates your main circuit from motors voltage
+supply.
 
-I used Dualsky Li-Pol 7.4V (220mAh 25C 2S) battery as a source of power for
+I used *Dualsky Li-Pol 7.4V (220mAh 25C 2S) battery* as a source of power for
 Residuum. My main requirement choosing this part was weight. This battery is
 only 16g and it can power my robot for a few minutes of driving. It's more then
 enough in context of robots contest, where you can change your battery for a
 fresh one even every single ride.
 
 Voltage from two cells Li-Pol is ideal for motors, but it's a little bit too
-high for digital part of Residuum. I have to use Pololu D24V10F3 step-down
-voltage regulator, which reduces 7.4V to 3.3V.
+high for a digital part of Residuum. I have to use *Pololu D24V10F3 step-down
+voltage regulator*, which reduces 7.4V to 3.3V.
 
 Last but not least - LCD screen and a few tact switches. This is interface
-between my and the robot. I'm using SparkFun Graphic LCD 84x48 (which is mostly
+between my and the robot. I'm using *SparkFun Graphic LCD 84x48* (which is mostly
 known as a screen from Nokia 5110) to display and control all robots settings
 and functions.
 
@@ -67,8 +68,8 @@ used 50 x 70 mm PCB prototype matrix board.
 
 ## Mechanics
 
-Finally something interesting - motors! Residuum uses two Pololu 30:1 micro
-motors (Micro Metal Gearmotor MP 6V) to move forward and change direction. To be
+Finally something interesting - motors! Residuum uses two *Pololu 30:1 micro
+motors* (Micro Metal Gearmotor MP 6V) to move forward and change direction. To be
 honest I didn't spend much time to calculate is it the best choice in my case.
 I've seen that many people are using those motors, so I ordered them too. Torque
 is high enough to move my construction smoothly. I bought also two Pololu 60×8mm
@@ -80,10 +81,10 @@ perfectly together.
 
 Of course all those elements have to be attached to some type of chassis. In
 this case I used 3D print technology. Residuum was designed in *SketchUp* - very
-simply and available also for free 3D modeling program. It took me only a few
-hours to prepare a model from scratch and to find somebody on *3D Hubs* who will
-print it. It's really amazing feeling when something from your screen transform
-into physical object in a matter of hours.
+simply and available for free 3D modeling program. It took me only a few hours
+to prepare a model from scratch and to find somebody on [3D Hubs](https://www.3dhubs.com/)
+who will print it. It's really amazing feeling when something from your screen
+transform into physical object in a matter of hours.
 
 ![sensors](/other/photos/photo_chassis_3d.gif?raw=true)
 
@@ -92,10 +93,11 @@ with other parts perfectly.
 
 ## Software
 
-Residuum program is written in C++. I used *PlatformIO* environment to manage
-build process, requirements and tests. *PlatformIO* toolset provides many useful
-features like CI integration and Atom editor plugin. It really helps me a lot to
-find myself in a little bit old-school C++ world.
+Residuum program is written in *C++*. I used [PlatformIO](http://platformio.org/)
+environment to manage build process, requirements and tests. *PlatformIO*
+toolset provides many useful features like CI integration and *Atom* editor
+plugin. It really helps me a lot to find myself in a little bit old-school C++
+world.
 
 Main following algorithm is based on *PID controller*, more precisely it uses
 only two members - P and D. I think that in this case short code example will be
@@ -111,10 +113,10 @@ void Follower::follow() {
 }
 ```
 
-Those few lines are the most important part in Residuum code. Lets go quick
+Those few lines are the most important part in Residuum code. Lets go quickly
 through them. `detectLine()` function returns `0` if line is exactly under
 middle sensor, `-X` if its under leftmost, and `+X` if its under rightmost. In
-my case (8 sensors) `X` is equal 3500 (1000 between sensors), so `detectLine()`
+my case (8 sensors) `X` is equal 3500 (1000 per sensor), so `detectLine()`
 returns values between `-3500` and `3500`. When we have "line error", we can
 calculate delta which should be applied to our motors. I'm using here simple
 version of PD controller, which calculates motors speed delta based on current
@@ -167,14 +169,14 @@ Sum: **491 PLN** (110 EUR / 125 USD)
 
 ## What's next
 
-I achieved the main goal of this project - I took part in robots contest, but I
-placed... almost last. Only two LEGO-based robots were slower then me. My best
+I achieved the main goal of this project - I took part in robots contest, but...
+I placed almost last. Only two LEGO-based robots were slower then me. My best
 time was `13.046` and fastest robot finished the same track in `6.683`. It
 means that I can't upgrade Residuum, I have to build something from scratch, but
-this time with other requirements.
+this time with other requirements. I will focus on robot weight and speed.
 
 ## Robocomp 2016
 
-One of my fastest ride from Robocomp 2016 in Kraków:
+One of my fastest ride from *Robocomp 2016* in Kraków:
 
 [![Residuum during Robocomp 2016](https://img.youtube.com/vi/713GhhHsxbs/0.jpg)](https://www.youtube.com/watch?v=713GhhHsxbs)
