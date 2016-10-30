@@ -101,7 +101,7 @@ Main following algorithm is based on *PID controller*, more precisely it uses
 only two members - P and D. I think that in this case short code example will be
 more suitable than any description.
 
-```
+```cpp
 void Follower::follow() {
   int error = this->lineDetector.detectLine();
   int speedDelta = this->kP * error + this->kD * (error - this->lastError);
@@ -127,7 +127,7 @@ available via menu system which I implemented specially for this project. All
 menu items are rendered on LCD screen and user can move between them with tact
 switches. My menu configuration looks like that:
 
-```
+```cpp
 menu.addItem(new ActionMenuItem("FOLLOW", new FollowCommand(lineDetector, motorsDriver, EDIT_BUTTON_PIN)));
 menu.addItem(new ActionMenuItem("CALIBRATE", new CalibrateCommand(qtr)));
 menu.addItem(new IntegerValueMenuItem("BASE SPEED", settings.motorsBaseSpeed, new UpdateMotorsBaseSpeedCommand()));
@@ -146,8 +146,9 @@ my architecture.
 ## Parts and costs
 
 Below you will find a list of all Residuum parts and other expenses. As I said,
-I didn't buy my Arudino, but I think that it should be listed here, because it's
-comparatively expensive part.
+I didn't buy my Arduino, but I think that it should be listed here, because it's
+comparatively expensive part. On the other hand, I didn't put here some
+common (and inexpensive) elements like resistors, wires, solder, etc.
 
 * Pololu 30:1 Micro Metal Gearmotor MP 6V x 2 - 129,80 PLN
 * Pololu Ball Caster with 3/8" Plastic Ball - 7,90 PLN
