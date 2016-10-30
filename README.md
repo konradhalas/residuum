@@ -48,7 +48,7 @@ supply.
 
 I used *Dualsky Li-Pol 7.4V (220mAh 25C 2S) battery* as a source of power for
 Residuum. My main requirement choosing this part was weight. This battery is
-only 16g and it can power my robot for a few minutes of driving. It's more then
+only 16g and it can power my robot for a few minutes of driving. It's more than
 enough in context of robots contest, where you can change your battery for a
 fresh one even every single ride.
 
@@ -170,7 +170,7 @@ Sum: **491 PLN** (110 EUR / 125 USD)
 ## What's next
 
 I achieved the main goal of this project - I took part in robots contest, but...
-I placed almost last. Only two LEGO-based robots were slower then me. My best
+I placed almost last. Only two LEGO-based robots were slower than me. My best
 time was `13.046` and fastest robot finished the same track in `6.683`. It
 means that I can't upgrade Residuum, I have to build something from scratch, but
 this time with other requirements. I will focus on robot weight and speed.
