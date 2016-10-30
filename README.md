@@ -76,9 +76,19 @@ wheels, Pololu motors brackets and Pololu ball caster (3/8" Plastic Ball) which
 is placed in front of the Residuum. The same supplier means that everything fits
 perfectly together.
 
-Of course all those elements have to be attached to chassis.
+![sensors](/other/photos/photo_mechanics.jpg?raw=true)
 
-TODO - motors, wheels and chassis (+ 3d model photo)
+Of course all those elements have to be attached to some type of chassis. In
+this case I used 3D print technology. Residuum was designed in *SketchUp* - very
+simply and available also for free 3D modeling program. It took me only a few
+hours to prepare a model from scratch and to find somebody on *3D Hubs* who will
+print it. It's really amazing feeling when something from your screen transform
+into physical object in a matter of hours.
+
+![sensors](/other/photos/photo_chassis_3d.gif?raw=true)
+
+Maybe Residuum chassis does not follow latest design fashions but it combines
+with other parts perfectly.
 
 ## Software
 
