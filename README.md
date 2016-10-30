@@ -1,4 +1,4 @@
-# Residuum
+# Residuum - line following robot
 
 Residuum is a line following robot. It's a simple construction based on Arduino
 board, array of eight reflectance sensors and two DC motors.
@@ -6,14 +6,14 @@ board, array of eight reflectance sensors and two DC motors.
 ![Residuum Robot](/other/photos/photo_1.jpg?raw=true)
 
 The main goal of this project was to take part in a robots contest as quick as
-possible. Such attitude helped me to finish this project in a short time
+possible. Such attitude helped me to finish this construction in a short time
 (~2 months), but also resolved many of my doubts - whenever I had a few possible
 solutions, I chose the easier one. Of course such approach has also drawbacks -
 Residuum it's definitely not a speed daemon.
 
 However, project is done and I learned a lot during this time. Robots contest
 was also a very good lesson for such beginner like I am. I have many ideas
-which I want to implement so stay tuned for the next version of Residuum.
+which I want to implement so this is definitely not my last line follower.
 
 Let's go briefly through all construction details.
 
@@ -21,10 +21,10 @@ Let's go briefly through all construction details.
 
 Arduino Leonardo is a Residuum brain. I used this board because a years ago I
 attended to soldering workshops and during this event we assembled Arduino
-Leonardo. So it's not a original board, but my own production. It has ATmega32U4
-microcontroller with 32kB flash memory, 2.5kB RAM, 1kB EEPROM, built in USB
-2.0 controller and a few standard LEDs and buttons. Nothing fancy, but what was
-more important in this project - Arduino is very easy to use.
+Leonardo. So it's not an original board, but my own production. It has
+ATmega32U4 microcontroller with 32kB flash memory, 2.5kB RAM, 1kB EEPROM, built
+in USB 2.0 controller and a few standard LEDs and buttons. Nothing fancy, but
+what was more important in this project - Arduino is very easy to use.
 
 ![electronics](/other/photos/photo_electronics.jpg?raw=true)
 
@@ -56,7 +56,7 @@ high for digital part of Residuum. I have to use Pololu D24V10F3 step-down
 voltage regulator, which reduces 7.4V to 3.3V.
 
 Last but not least - LCD screen and a few tact switches. This is interface
-between my and the robot. I'am using SparkFun Graphic LCD 84x48 (which is mostly
+between my and the robot. I'm using SparkFun Graphic LCD 84x48 (which is mostly
 known as a screen from Nokia 5110) to display and control all robots settings
 and functions.
 
@@ -97,11 +97,57 @@ build process, requirements and tests. *PlatformIO* toolset provides many useful
 features like CI integration and Atom editor plugin. It really helps me a lot to
 find myself in a little bit old-school C++ world.
 
-TODO - C++, PlatformIO, PID and Menu
+Main following algorithm is based on *PID controller*, more precisely it uses
+only two members - P and D. I think that in this case short code example will be
+more suitable than any description.
+
+```
+void Follower::follow() {
+  int error = this->lineDetector.detectLine();
+  int speedDelta = this->kP * error + this->kD * (error - this->lastError);
+  this->lastError = error;
+  this->motorsDriver.setLeftMotorSpeed(this->motorsDriver.getBaseMotorSpeed() + speedDelta);
+  this->motorsDriver.setRightMotorSpeed(this->motorsDriver.getBaseMotorSpeed() - speedDelta);
+}
+```
+
+Those few lines are the most important part in Residuum code. Lets go quick
+through them. `detectLine()` function returns `0` if line is exactly under
+middle sensor, `-X` if its under leftmost, and `+X` if its under rightmost. In
+my case (8 sensors) `X` is equal 3500 (1000 between sensors), so `detectLine()`
+returns values between `-3500` and `3500`. When we have "line error", we can
+calculate delta which should be applied to our motors. I'm using here simple
+version of PD controller, which calculates motors speed delta based on current
+error and previous one. Finding proper value of each member gain (`kP` and `kD`)
+is the most tricky part in such algorithm. When we have calculated speed delta,
+we can change speed of each motor.
+
+All settings like `kP` and `kD` values, base motors speed, and so one, are
+available via menu system which I implemented specially for this project. All
+menu items are rendered on LCD screen and user can move between them with tact
+switches. My menu configuration looks like that:
+
+```
+menu.addItem(new ActionMenuItem("FOLLOW", new FollowCommand(lineDetector, motorsDriver, EDIT_BUTTON_PIN)));
+menu.addItem(new ActionMenuItem("CALIBRATE", new CalibrateCommand(qtr)));
+menu.addItem(new IntegerValueMenuItem("BASE SPEED", settings.motorsBaseSpeed, new UpdateMotorsBaseSpeedCommand()));
+menu.addItem(new FloatValueMenuItem("KP", settings.followerKp, FOLLOWER_KP_BASE, new UpdateFollowerKpCommand()));
+menu.addItem(new FloatValueMenuItem("KD", settings.followerKd, FOLLOWER_KD_BASE, new UpdateFollowerKdCommand()));
+```
+
+During development I was trying to implement all parts os Residuum program
+as a standard C++ libraries, without messing around with Arduino specific code.
+This approach gives ma ability to test nearly my whole code very easily in my
+local environment. Moreover, this code is now portable. Of course, it has to be
+connection between my code and Arduino. This thin layer is realized
+as an implementation of a few abstract base classes, which acts as interfaces in
+my architecture.
 
 ## Parts and costs
 
-TODO - add intro about Arduino and other not listed parts (resistors, buttons)
+Below you will find a list of all Residuum parts and other expenses. As I said,
+I didn't buy my Arudino, but I think that it should be listed here, because it's
+comparatively expensive part.
 
 * Pololu 30:1 Micro Metal Gearmotor MP 6V x 2 - 129,80 PLN
 * Pololu Ball Caster with 3/8" Plastic Ball - 7,90 PLN
@@ -114,9 +160,9 @@ TODO - add intro about Arduino and other not listed parts (resistors, buttons)
 * SparkFun Graphic LCD 84x48 - Nokia 5110 - 38,90 PLN
 * PCB Prototype Matrix Board 50 x 70 mm  - 4,50 PLN
 * Arduino Leonardo - 88,00 PLN
-* 3D print - 61,90 PLN
+* 3D print via 3dhubs.com - 61,90 PLN
 
-Sum: 491 PLN
+Sum: **491 PLN** (110 EUR / 125 USD)
 
 ## What's next
 
