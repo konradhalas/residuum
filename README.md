@@ -67,6 +67,17 @@ PCB prototype matrix board.
 
 ## Mechanics
 
+Finally something interesting - motors! Residuum uses two Pololu 30:1 micro
+motors (Micro Metal Gearmotor MP 6V) to move forward and change direction. To be
+honest I didn't spend much time to calculate is it the best choice in my case.
+I've seen that many people are using those motors, so I ordered them too. Torque
+is high enough to move my construction smoothly. I bought also two Pololu 60×8mm
+wheels, Pololu motors brackets and Pololu ball caster (3/8" Plastic Ball) which
+is placed in front of the Residuum. The same supplier means that everything fits
+perfectly together.
+
+Of course all those elements have to be attached to chassis.
+
 TODO - motors, wheels and chassis (+ 3d model photo)
 
 ## Software
@@ -77,7 +88,7 @@ TODO - C++, PlatformIO, PID and Menu
 
 TODO - add intro about Arduino and other not listed parts (resistors, buttons)
 
-* Pololu 30:1 Micro Metal Gearmotor LP 6V x 2 - 129,80 PLN
+* Pololu 30:1 Micro Metal Gearmotor MP 6V x 2 - 129,80 PLN
 * Pololu Ball Caster with 3/8" Plastic Ball - 7,90 PLN
 * Pololu QTR-8RC Reflectance Sensor Array - 39,90 PLN
 * Pololu Wheel 60×8mm Pair Black - 29,90 PLN
