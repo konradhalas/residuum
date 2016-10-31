@@ -29,8 +29,8 @@ what was more important in this project - it's a kind of "plug-n-play" device.
 ![electronics](/other/photos/photo_electronics.jpg?raw=true)
 
 Next body part - eyes. I used *Pololu QTR-8RC* with 8 reflectance sensors to
-detect line in front of my construction. This module is specially designed for
-line following robots. Moreover, supplier provides library for Arduino family
+detect a line in front of my construction. This module is specially designed for
+a line following robots. Moreover, supplier provides library for Arduino family
 and all you have to do is call `readLine()` function - simple like that. Another
 advantage of QTR-8RC is that it works with digital I/O pins, so limited number
 of analog-to-digital converters it's not a problem (e.g. my Arduino has only 6
