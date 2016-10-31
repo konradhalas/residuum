@@ -11,20 +11,20 @@ possible. Such attitude helped me to finish this construction in a short time
 solutions, I chose the easier one. Of course such approach has also drawbacks -
 Residuum it's definitely not a speed daemon.
 
-However, project is done and I learned a lot during this time. Robots contest
-was also a very good lesson for such beginner like I am. I have many ideas
-which I want to implement so this is definitely not my last line follower.
+However, the project is done and I learned a lot during this time. The robots
+contest was also a very good lesson for such beginner like I am. I have many
+ideas which I want to implement so this is definitely not my last line follower.
 
 Let's go briefly through all construction details.
 
 ## Electronics
 
-*Arduino Leonardo* is a Residuum brain. I used this board because a years ago I
+*Arduino Leonardo* is a Residuum brain. I used this board because years ago I
 attended to soldering workshops and during this event we assembled Arduino
 Leonardo. So it's not an original board, but my own production. It has
 *ATmega32U4* microcontroller with 32kB flash memory, 2.5kB RAM, 1kB EEPROM, built
 in USB 2.0 controller and a few standard LEDs and buttons. Nothing fancy, but
-what was more important in this project - it's easy to use.
+what was more important in this project - it's a kind of "plug-n-play" device.
 
 ![electronics](/other/photos/photo_electronics.jpg?raw=true)
 
