@@ -66,6 +66,8 @@ and functions.
 All those parts were soldered on a single board in a shape of Arduino shield. I
 used 50 x 70 mm PCB prototype matrix board.
 
+![sensors](/other/schema.png?raw=true)
+
 ## Mechanics
 
 Finally something interesting - motors! Residuum uses two *Pololu 30:1 micro
