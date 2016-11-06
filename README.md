@@ -169,6 +169,16 @@ common (and inexpensive) elements like resistors, wires, solder, etc.
 
 Sum: **491 PLN** (110 EUR / 125 USD)
 
+## Dimensions and weight
+
+The robot dimensions:
+
+- length: *19 cm*
+- width: *14 cm*
+- height: *6 cm*
+
+The Residuum weights *166 g* with a Li-Pol battery.
+
 ## What's next
 
 I achieved the main goal of this project - I took part in a robots contest,
