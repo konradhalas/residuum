@@ -11,4 +11,5 @@ install:
     - pip install twisted platformio==3.1.0 
 
 script:
+    - platformio --version
     - platformio test -e local | tail -n 1 | grep PASSED
