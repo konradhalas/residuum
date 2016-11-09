@@ -13,6 +13,9 @@ env:
 
 install:
     - pip install -U platformio
+    - platformio lib -g install 13
+    - platformio lib -g install 81
+    - platformio lib -g install 978
 
 script:
     - platformio ci --board=leonardo
