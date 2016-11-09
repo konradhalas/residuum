@@ -3,7 +3,7 @@
 
 #include <QTRSensors.h>
 
-#include <follower.h>
+#include "follower.h"
 
 class QtrLineDetector: public LineDetector {
   public:
