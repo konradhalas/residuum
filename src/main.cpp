@@ -4,6 +4,11 @@
 #include <Adafruit_PCD8544.h>
 #include <QTRSensors.h>
 
+
+#include <menu.h>
+#include <follower.h>
+#include <storage.h>
+
 #include "menu.h"
 #include "follower.h"
 #include "storage.h"
