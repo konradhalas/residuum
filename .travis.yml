@@ -16,4 +16,4 @@ install:
     - platformio lib -g install 13 81 978
 
 script:
-    - platformio ci --board=leonardo
+    - platformio ci --board=leonardo -l lib
