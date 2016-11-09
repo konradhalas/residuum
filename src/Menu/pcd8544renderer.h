@@ -1,7 +1,7 @@
 #ifndef LCD_MENU_H
 #define LCD_MENU_H
 
-#include <menu.h>
+#include "menu.h"
 
 #include <Adafruit_PCD8544.h>
 
