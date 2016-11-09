@@ -5,7 +5,7 @@
 typedef std::string String;
 #endif
 
-#include <menu.h>
+#include "menu.h"
 
 Menu::Menu(MenuRenderer & renderer, MenuActionsProvider & actionsProvider, int handleTickFrequency) : MenuItemsContainer(), renderer(renderer), actionsProvider(actionsProvider), handleTickFrequency(handleTickFrequency) {
   this->selectedMenuItem = NULL;
