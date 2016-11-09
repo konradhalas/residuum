@@ -4,7 +4,7 @@ Residuum is a line following robot. It's a simple construction based on the Ardu
 
 ![Residuum Robot](/other/photos/photo_1.jpg?raw=true)
 
-The main goal of this project was to expedite participation in a contest of robots. Such an attitude enabled me to finish this construction in a short time (~2 months) but also resolved many of my doubts - whenever I had a few possible solutions, I chose the easier one. Of course such an approach also has its drawbacks - Residuum it's definitely not a speed daemon.
+The main goal of this project was to expedite participation in a contest of robots. Such an attitude enabled me to finish this construction in a short time (~2 months) but also resolved many of my doubts - whenever I had a few possible solutions, I chose the easier one. Of course such an approach also has its drawbacks - Residuum is definitely not a speed daemon.
 
 The project, however, is complete and I significantly expanded my knowledge in robotics during this time. The robot contest was also a very good lesson for such beginner as I. I have many ideas that I want to implement so this is definitely not my last line follower.
 
