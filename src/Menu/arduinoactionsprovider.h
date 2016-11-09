@@ -1,7 +1,7 @@
 #ifndef ARDUINO_MENU_ACTIONS_PROVIDER_H
 #define ARDUINO_MENU_ACTIONS_PROVIDER_H
 
-#include <actionsprovider.h>
+#include "actionsprovider.h"
 
 class ArduinoMenuActionsProvider: public MenuActionsProvider {
   public:
