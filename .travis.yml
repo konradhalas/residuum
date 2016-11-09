@@ -11,4 +11,4 @@ install:
     - pip install -U platformio
 
 script:
-    - platformio ci --project-conf=platformio.ini src/main.cpp
+    - platformio ci --project-conf=platformio.ini .
