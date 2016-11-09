@@ -1,5 +1,7 @@
 # Residuum - line following robot
 
+[![Build Status](https://travis-ci.org/konradhalas/residuum.svg?branch=master)](https://travis-ci.org/konradhalas/residuum)
+
 Residuum is a line following robot. It's a simple construction based on the Arduino board, an array of eight reflectance sensors and two DC motors.
 
 ![Residuum Robot](/other/photos/photo_1.jpg?raw=true)
