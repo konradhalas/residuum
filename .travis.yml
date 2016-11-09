@@ -7,9 +7,12 @@ cache:
     directories:
         - "~/.platformio"
 
+env:
+  - PLATFORMIO_CI_SRC=src/main.cpp
+  - PLATFORMIO_CI_SRC=test/
+
 install:
-    - pip install twisted platformio==3.1.0 
+    - pip install -U platformio
 
 script:
-    - platformio --version
-    - platformio test -e local | tail -n 1 | grep PASSED
+    - platformio ci --board=leonardo
