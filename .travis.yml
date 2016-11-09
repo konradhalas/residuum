@@ -8,7 +8,7 @@ cache:
         - "~/.platformio"
 
 env:
-  - PLATFORMIO_CI_SRC=src/main.cpp PLATFORMIO_BUILD_FLAGS="-Ldir lib/Menu -I lib/Menu"
+  - PLATFORMIO_CI_SRC=src/main.cpp PLATFORMIO_BUILD_FLAGS="-Ldir lib/Menu -I lib/Menu/menu.h"
   - PLATFORMIO_CI_SRC=test/run.cpp
 
 install:
