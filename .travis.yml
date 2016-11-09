@@ -9,6 +9,7 @@ cache:
 
 install:
     - pip install -U platformio
+    - platformio lib -g install 13 81 978
 
 script:
-    - platformio ci --project-conf=platformio.ini .
+    - platformio ci --board="leonardo" src --lib="./lib/Follower" --lib="./lib/Menu"  --lib="./lib/Storage"
