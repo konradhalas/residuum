@@ -114,7 +114,7 @@ Residuum during *Robomaticon 2017* at Warsaw, Poland:
 
 [![Residuum during Robomaticon 2017](https://img.youtube.com/vi/LSfOCPmFO3o/0.jpg)](https://www.youtube.com/watch?v=LSfOCPmFO3o)
 
-For this contest I upgraded Residuum a little bit. Instead of displaying all robot settings on an LCD screen and using buttons to interact with Residuum, I added a Bluetooth module (HC-08, 26,90 PLN) and implemented a simple Android application - (*LF Cockpit*)[https://github.com/konradhalas/lf-cockpit]. All Bluetooth related code is placed in `bluetooth` branch.
+For this contest I upgraded Residuum a little bit. Instead of displaying all robot settings on an LCD screen and using buttons to interact with Residuum, I added a Bluetooth module (HC-08, 26,90 PLN) and implemented a simple Android application - *(LF Cockpit)[https://github.com/konradhalas/lf-cockpit]*. All Bluetooth related code is placed in `bluetooth` branch.
 
 ## Dimensions and weight
 
