@@ -104,11 +104,17 @@ Sum: **491 PLN** (110 EUR / 125 USD)
 
 I achieved the main goal of this project - I took part in a robot contest, but... I placed almost last. Only two LEGO-based robots were slower than me. My best time was `13.046` while the fastest robot finished the same track in `6.683`. To me, this means that I can't upgrade Residuum. I realize now that I must build something from scratch, but this time with renewed requirements. Going forward I will focus on the robot’s weight and speed.
 
-## Robocomp 2016
+## Contests
 
-One of my fastest rides from *Robocomp 2016* in Kraków, Poland:
+One of my fastest rides from *Robocomp 2016* at Kraków, Poland:
 
 [![Residuum during Robocomp 2016](https://img.youtube.com/vi/713GhhHsxbs/0.jpg)](https://www.youtube.com/watch?v=713GhhHsxbs)
+
+Residuum during *Robomaticon 2017* at Warsaw, Poland:
+
+[![Residuum during Robomaticon 2017](https://img.youtube.com/vi/LSfOCPmFO3o/0.jpg)](https://www.youtube.com/watch?v=LSfOCPmFO3o)
+
+For this contest I upgraded Residuum a little bit. Instead of displaying all robot settings on an LCD screen and using buttons to interact with Residuum, I added a Bluetooth module (HC-08, 26,90 PLN) and implemented a simple Android application - (*LF Cockpit*)[https://github.com/konradhalas/lf-cockpit]. All Bluetooth related code is placed in `bluetooth` branch.
 
 ## Dimensions and weight
 
